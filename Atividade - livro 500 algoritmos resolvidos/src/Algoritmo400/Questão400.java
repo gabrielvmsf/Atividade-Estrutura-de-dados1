@@ -55,7 +55,7 @@ public class Questão400 {
             if(contagemQ>0){
                 for(i=0;i<=contagemQ;i++){
                     if(situação[i]=="ocupado"){
-                        System.out.println("\nO quarto"+i+"está ocupado");
+                        System.out.println("\nO quarto "+i+" está ocupado");
                     }
                 }
             }else System.out.println("não foi registrado nenhum quarto");
