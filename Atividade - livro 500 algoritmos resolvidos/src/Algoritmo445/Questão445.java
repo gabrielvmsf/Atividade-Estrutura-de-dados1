@@ -1,3 +1,10 @@
+/*Criar um algoritmo que declare uma matriz 5 x 5 e armazene em um vetor o maior 
+elemento cadastrado em cada coluna da matriz e em um vetor o menor elemento cadastrado em cada coluna da matriz. Imprima: 
+m toda a matriz; 
+o vetor a; 
+m o vetor b; 
+m (a + b)/2. */
+
 package Algoritmo445;
 
 import java.util.Scanner;

@@ -1,3 +1,6 @@
+//Entrar com valores inteiros para uma matriz A[4] [4] e para uma matriz 8[4] [4]. 
+//Gerar e imprimir a matriz SOMA [4] [4]. 
+
 package Algoritmo418;
 
 import java.util.Scanner;

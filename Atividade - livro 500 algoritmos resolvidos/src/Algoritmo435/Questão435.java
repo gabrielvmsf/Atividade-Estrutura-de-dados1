@@ -18,9 +18,10 @@ public class Questão435 {
             }
         }
 
-        System.out.println("Digite número da coluna(1-5) ou -999 para acabar: ");
-        int c = scan.nextInt();
+       
         while(true){
+            System.out.println("Digite número da coluna(1-5) ou -999 para acabar: ");
+            int c = scan.nextInt();
             while(c<1||c>5){
                 System.out.println("Digite número da coluna entre 1 - 5: ");
                 c = scan.nextInt();
@@ -30,7 +31,7 @@ public class Questão435 {
     c=c-1;
     System.out.println("Coluna:"+(c+1)+"\n");
     for(i=0;i<matriz.length;i++){
-        System.out.println(matriz[i][c]+"\n");
+        System.out.println(matriz[c][i]+"\n");
         
     }
 }

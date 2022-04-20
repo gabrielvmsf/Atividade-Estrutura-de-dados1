@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class Questão425 {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        int[][] qtde = new int[50][3];
-        String[] nome = new String[50];
+        int[][] qtde = new int[3][3];
+        String[] nome = new String[3];
 
         for(int i=0;i<nome.length;i++){
             System.out.println("digite nome da "+ (i + 1) +" planta: ");

@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class Questão356 {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
-        String[] NomeAlunos = new String[15];
+        String[] NomeAlunos = new String[3];
         float[] Nota1 = new float[NomeAlunos.length];
         float[] Nota2 = new float[NomeAlunos.length];
         int[] média = new int[NomeAlunos.length];
