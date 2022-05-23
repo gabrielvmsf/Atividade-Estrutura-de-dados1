@@ -3,16 +3,29 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scan = new Scanner(System.in);
-        System.out.println("Forma 1 ou 2?");
-        int forma = scan.nextInt();
         System.out.println("Digite a quantidade de discos desejadas: ");
         int qtdDiscos = scan.nextInt();
         long T = 1;
-
-        if(forma==1){
-            Torre.torresHanói(qtdDiscos, T, qtdDiscos);
-        } else if(forma==2){
-            Torre.torresHanói2(qtdDiscos, 'A', 'B','C',T);
+        long tempoInicial = System.currentTimeMillis();
+        Torre.torresHanói2(qtdDiscos, 'A', 'B', 'C');
+        Torre.torresHanói(qtdDiscos, T, qtdDiscos);
+        
+        long tempoFinal = System.currentTimeMillis();
+        long tempoMili = tempoFinal - tempoInicial;
+        long tempoSeg = tempoMili/1000, tempoMin=tempoSeg/60, tempoHor=tempoMin/60;
+        if(tempoMin>=60){
+            long t1 = tempoHor*60;
+            tempoMin = t1 - tempoMin;
         }
+        if(tempoSeg>=60){
+            long t1 = tempoMin * 60;
+            tempoSeg = t1 - tempoSeg;
+        }
+        if (tempoMili>=1000){
+            long t1 = tempoSeg * 1000;
+            tempoMili = t1 - tempoMili;
+        }
+
+        System.out.println("Tempo de execução: "+tempoHor+":"+tempoMin+":"+tempoSeg+":"+tempoMili);
     }
 }
