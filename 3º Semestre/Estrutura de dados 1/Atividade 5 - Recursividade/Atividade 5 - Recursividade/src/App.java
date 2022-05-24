@@ -5,8 +5,10 @@ public class App {
         Scanner scan = new Scanner(System.in);
         System.out.println("Digite a quantidade de discos desejadas: ");
         int qtdDiscos = scan.nextInt();
+
         long T = 1;
         long tempoInicial = System.currentTimeMillis();
+        
         Torre.torresHanói2(qtdDiscos, 'A', 'B', 'C');
         Torre.torresHanói(qtdDiscos, T, qtdDiscos);
         
