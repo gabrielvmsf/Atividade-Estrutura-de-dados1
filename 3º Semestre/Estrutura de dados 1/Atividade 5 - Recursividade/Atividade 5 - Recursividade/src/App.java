@@ -15,15 +15,15 @@ public class App {
         long tempoSeg = tempoMili/1000, tempoMin=tempoSeg/60, tempoHor=tempoMin/60;
         if(tempoMin>=60){
             long t1 = tempoHor*60;
-            tempoMin = t1 - tempoMin;
+            tempoMin = tempoMin - t1;
         }
         if(tempoSeg>=60){
             long t1 = tempoMin * 60;
-            tempoSeg = t1 - tempoSeg;
+            tempoSeg = tempoSeg - t1;
         }
         if (tempoMili>=1000){
             long t1 = tempoSeg * 1000;
-            tempoMili = t1 - tempoMili;
+            tempoMili = tempoMili - t1;
         }
 
         System.out.println("Tempo de execução: "+tempoHor+":"+tempoMin+":"+tempoSeg+":"+tempoMili);
