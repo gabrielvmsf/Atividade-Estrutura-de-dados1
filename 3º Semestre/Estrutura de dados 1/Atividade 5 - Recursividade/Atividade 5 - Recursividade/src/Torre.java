@@ -9,11 +9,11 @@ public class Torre {
 
     public static long torresHanói2(int num, char a, char b, char c) {
         if (num == 1) {
-            System.out.println("Disco " + num + " de " + a + " para " + c + "\n");
+            System.out.println("Disco " + num + " de " + a + " para " + c);
             return 1;
         } else {
             torresHanói2((num - 1), a, c, b);
-            System.out.println("Disco " + num + " de " + a + " para " + c + "\n");
+            System.out.println("Disco " + num + " de " + a + " para " + c);
             return torresHanói2((num - 1), c, b, a);
         }
     }

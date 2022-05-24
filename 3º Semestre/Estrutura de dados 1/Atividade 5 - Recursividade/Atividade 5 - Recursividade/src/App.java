@@ -12,6 +12,7 @@ public class App {
         
         long tempoFinal = System.currentTimeMillis();
         long tempoMili = tempoFinal - tempoInicial;
+        
         long tempoSeg = tempoMili/1000, tempoMin=tempoSeg/60, tempoHor=tempoMin/60;
         if(tempoMin>=60){
             long t1 = tempoHor*60;
