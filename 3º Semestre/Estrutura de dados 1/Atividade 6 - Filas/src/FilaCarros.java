@@ -1,5 +1,3 @@
-package com.mycompany.filajava1;
-
 import java.util.ArrayList;
 import java.util.List;
 
