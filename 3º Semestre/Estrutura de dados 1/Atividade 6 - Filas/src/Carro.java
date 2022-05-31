@@ -1,4 +1,4 @@
-public class Carro {
+public class Carro implements Comparable<Carro>{
     private int numId;
     private String marca;
     private String nomeDono;
@@ -13,6 +13,11 @@ public class Carro {
     public Carro(int numId) {
         this.numId = numId;
     }
+
+
+    public Carro() {
+    }
+
     
 
     public int getNumId() {
@@ -37,6 +42,11 @@ public class Carro {
 
     public void setNome(String nome) {
         this.nomeDono = nome;
+    }
+
+    @Override
+    public int compareTo(Carro o) {
+        return (this.numId - o.getNumId());
     }
 
 }

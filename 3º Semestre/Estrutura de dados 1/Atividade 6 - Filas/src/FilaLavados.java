@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
 public class FilaLavados {
+    Carro carro = new Carro();
     List<Carro> carros = new ArrayList<Carro>();
     
     void insere(Carro a){
@@ -21,5 +23,11 @@ public class FilaLavados {
     }
     int tamanhoFila() {
         return this.carros.size();
+    }
+    Carro getCarro(int num){
+        return carros.get(num);
+    }
+    void ordenar(){
+        Collections.sort(carros);
     }
 }
