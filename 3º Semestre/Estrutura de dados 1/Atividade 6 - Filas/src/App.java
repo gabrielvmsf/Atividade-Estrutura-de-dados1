@@ -12,13 +12,12 @@ public class App {
         while (true) {
             Carro carro = new Carro(gerador.nextInt(400),"A","A");
             filaCarros.insere(carro);
-            i++;
-            j++;
+            i++; j++;
             if (j == 3) {
                 filaLavados.insere(filaCarros.remover());
                 j--;
             }
-            if (filaCarros.tamanhoFila()<=2 && i>2 && filaLavados.tamanhoFila()>=19) {
+            if (filaCarros.tamanhoFila()<=2 && i>2 && filaLavados.tamanhoFila()>=15) {
                 filaLavados.insere(filaCarros.remover());
                 filaLavados.insere(filaCarros.remover());
                 break;
@@ -33,14 +32,14 @@ public class App {
                 for (i = 0; i < filaLavados.tamanhoFila(); i++) {
                     Carro carro = filaLavados.getCarro(i);
                     System.out.println(
-                            "Carro de identificador " + carro.getNumId() + " da marca "+carro.getMarca()+" do dono(a) do veiculo "+carro.getNome()+" já foi lavado");
+                            "Carro de identificador " + carro.getNumId() + " da marca "+carro.getMarca()+" do dono(a) do veiculo chamado(a) "+carro.getNome()+" já foi lavado");
                 }
             } else if (valor == 2) {
                 filaLavados.ordenar();
                 for (i = 0; i < filaLavados.tamanhoFila(); i++) {
                     Carro carro = filaLavados.getCarro(i);
                     System.out.println(
-                            "Carro de identificador " + carro.getNumId() + " da marca "+carro.getMarca()+" do dono(a) do veiculo "+carro.getNome()+" já foi lavado");
+                            "Carro de identificador " + carro.getNumId() + " da marca "+carro.getMarca()+" do dono(a) do veiculo chamado(a) "+carro.getNome()+" já foi lavado");
                 }
             } else if (valor == 3){
                 System.out.println("\nPrograma Finalizado!");
