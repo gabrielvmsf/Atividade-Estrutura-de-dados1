@@ -26,8 +26,7 @@ public class ContaEspecial extends Conta {
 
     public boolean depositoContaEspecial(double valor) {
         if (valor > 0) {
-            depositar(valor);
-            this.saldo = getSaldo();
+            this.saldo += valor;
             return true;
         }
         return false;
