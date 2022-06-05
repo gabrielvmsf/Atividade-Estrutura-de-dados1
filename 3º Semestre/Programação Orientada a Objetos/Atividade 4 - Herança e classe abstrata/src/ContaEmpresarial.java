@@ -1,12 +1,8 @@
-public class ContaEmpresarial extends Conta {
+public class ContaEmpresarial extends ContaEspecial {
     private String cnpjTitular;
-    public ContaEmpresarial(int nroConta, int agencia, String nomeTitular, String cnpjTitular) {
-        super(nroConta, agencia, nomeTitular);
-        this.cnpjTitular = cnpjTitular;
-    }
 
-    public ContaEmpresarial(int nroConta, String nomeTitular, String cnpjTitular) {
-        super(nroConta, nomeTitular);
+    public ContaEmpresarial(String cnpjTitular, int nroConta, String nomeTitular, String cpfTitular, double valorChequeEspecial) {
+        super(nroConta, nomeTitular, cpfTitular, valorChequeEspecial);
         this.cnpjTitular = cnpjTitular;
     }
 }
