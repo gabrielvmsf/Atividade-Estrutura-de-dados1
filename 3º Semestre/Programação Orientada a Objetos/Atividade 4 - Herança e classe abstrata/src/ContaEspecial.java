@@ -16,6 +16,12 @@ public class ContaEspecial extends Conta {
         this.saldo = getSaldo();
     }
 
+    public ContaEspecial(int nroConta, String nomeTitular, double valorChequeEspecial) {
+        super(nroConta, nomeTitular);
+        this.valorChequeEspecial = valorChequeEspecial;
+        this.saldo = getSaldo();
+    }
+
     public boolean saqueContaEspecial(double valor) {
         if (valor <= (this.saldo + valorChequeEspecial) && valor > 0) {
             this.saldo -= valor;
@@ -32,10 +38,10 @@ public class ContaEspecial extends Conta {
         return false;
     }
 
-    public boolean transferir(double valor, Conta conta) {
+    public boolean transferirContaEspecial(double valor, Conta conta) {
         if (valor <= (this.saldo + valorChequeEspecial) && valor > 0) {
             if (this.saqueContaEspecial(valor)) {
-                conta.depositar(valor);
+                depositoContaEspecial(valor);
                 return true;
             }
         }
