@@ -1,5 +1,6 @@
 public class PessoaJuridica extends Cliente {
     private String cnpj;
+    private Conta contaEmpresarial;
 
     public PessoaJuridica(String nome, String cpf, String endereco, String telefone, String celular, int idade,String cnpjString) {
         super(nome, endereco, telefone, celular, idade);
@@ -7,6 +8,10 @@ public class PessoaJuridica extends Cliente {
     }
 
     public void criarContaEmpresarial(int nroConta, String nomeTitular){
-        Conta contaEmpresarial = new ContaEmpresarial(nroConta, nomeTitular, cnpj);
+        this.contaEmpresarial = new ContaEmpresarial(nroConta, nomeTitular, cnpj);
+    }
+
+    public Conta getContaEmpresarial() {
+        return this.contaEmpresarial;
     }
 }

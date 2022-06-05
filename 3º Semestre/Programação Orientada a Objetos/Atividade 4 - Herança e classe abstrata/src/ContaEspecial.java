@@ -3,6 +3,7 @@ public class ContaEspecial extends Conta {
     private double valorChequeEspecial;
     private double saldo;
 
+
     public ContaEspecial(int nroConta, int agencia, String nomeTitular, String cpfTitular, double valorChequeEspecial) {
         super(nroConta, agencia, nomeTitular, cpfTitular);
         this.valorChequeEspecial = valorChequeEspecial;
