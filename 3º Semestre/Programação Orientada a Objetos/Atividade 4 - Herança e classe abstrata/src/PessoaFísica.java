@@ -22,17 +22,36 @@ public class PessoaFísica extends Cliente {
         this.contaEspecial = new ContaEspecial(nroConta, nomeTitular, cpf, valorChequeEspecial);
     }
 
+
+    public String getCpf() {
+        return this.cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
     public Conta getContaCorrente() {
         return this.contaCorrente;
+    }
+
+    public void setContaCorrente(Conta contaCorrente) {
+        this.contaCorrente = contaCorrente;
     }
 
     public Conta getContaPoupança() {
         return this.contaPoupança;
     }
 
+    public void setContaPoupança(Conta contaPoupança) {
+        this.contaPoupança = contaPoupança;
+    }
+
     public Conta getContaEspecial() {
         return this.contaEspecial;
     }
 
-
+    public void setContaEspecial(Conta contaEspecial) {
+        this.contaEspecial = contaEspecial;
+    }
 }

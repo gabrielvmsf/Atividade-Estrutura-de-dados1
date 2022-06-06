@@ -51,5 +51,8 @@ public class ContaEspecial extends Conta {
     public double getValorChequeEspecial() {
         return this.valorChequeEspecial;
     }
+    public void setValorChequeEspecial(double ValorChequeEspecial){
+        this.valorChequeEspecial = ValorChequeEspecial;
+    }
 
 }

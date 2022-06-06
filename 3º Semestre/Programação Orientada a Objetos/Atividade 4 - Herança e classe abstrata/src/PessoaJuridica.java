@@ -7,11 +7,24 @@ public class PessoaJuridica extends Cliente {
         this.cnpj = cnpjString;
     }
 
-    public void criarContaEmpresarial(int nroConta, String nomeTitular){
-        this.contaEmpresarial = new ContaEmpresarial(nroConta, nomeTitular, cnpj);
+    public void criarContaEmpresarial(int nroConta, String nomeTitular,double valorChequeEspecial){
+        this.contaEmpresarial = new ContaEmpresarial(this.cnpj, nroConta, nomeTitular, valorChequeEspecial);
+    }
+
+    public String getCnpj() {
+        return this.cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     public Conta getContaEmpresarial() {
         return this.contaEmpresarial;
     }
+
+    public void setContaEmpresarial(Conta contaEmpresarial) {
+        this.contaEmpresarial = contaEmpresarial;
+    }
+    
 }

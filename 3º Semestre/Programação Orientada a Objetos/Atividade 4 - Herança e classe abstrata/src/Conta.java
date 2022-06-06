@@ -40,7 +40,7 @@ public abstract class Conta implements Comparable<Conta>{
       this.saldo = 0.0;
    }
 
-
+   
    public boolean depositar(double valor){
       if(valor > 0){
          this.saldo += valor;
@@ -65,7 +65,6 @@ public abstract class Conta implements Comparable<Conta>{
       }
       return false;
    }
-   
 
    public double getSaldo(){
       return this.saldo;
@@ -101,6 +100,24 @@ public abstract class Conta implements Comparable<Conta>{
 
    public void setCpfTitular(String cpfTitular) {
       this.cpfTitular = cpfTitular;
+   }
+
+   @Override
+   public int compareTo(Conta c) {
+      if(this.nroConta > c.getNroConta()) return 1;
+      if(this.nroConta < c.getNroConta()) return -1;
+      return 0;
+   }
+
+
+   @Override
+   public boolean equals(Object obj) {
+
+      if(obj.getClass() == Conta.class){
+         Conta c = (Conta) obj;
+         return this.nroConta == c.getNroConta();
+      }
+      return false;
    }
 
 
