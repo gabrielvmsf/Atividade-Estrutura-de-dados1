@@ -41,6 +41,32 @@ public abstract class Conta implements Comparable<Conta>{
    }
 
 
+   public boolean depositar(double valor){
+      if(valor > 0){
+         this.saldo += valor;
+         return true;
+      }
+      return false;
+   }
+
+
+   public boolean sacar(double valor){
+      if(valor > 0 && valor <= this.saldo){
+         this.saldo -= valor;
+         return true;
+      }
+      return false;
+   }
+
+   public boolean transferir(double valor, Conta conta){
+      if(this.sacar(valor)){
+         conta.depositar(valor);
+         return true;
+      }
+      return false;
+   }
+   
+
    public double getSaldo(){
       return this.saldo;
    }
@@ -75,50 +101,6 @@ public abstract class Conta implements Comparable<Conta>{
 
    public void setCpfTitular(String cpfTitular) {
       this.cpfTitular = cpfTitular;
-   }
-
-
-   public boolean depositar(double valor){
-      if(valor > 0){
-         this.saldo += valor;
-         return true;
-      }
-      return false;
-   }
-
-
-   public boolean sacar(double valor){
-      if(valor > 0 && valor <= this.saldo){
-         this.saldo -= valor;
-         return true;
-      }
-      return false;
-   }
-
-   public boolean transferir(double valor, Conta conta){
-      if(this.sacar(valor)){
-         conta.depositar(valor);
-         return true;
-      }
-      return false;
-   }
-
-   @Override
-   public int compareTo(Conta c) {
-      if(this.nroConta > c.getNroConta()) return 1;
-      if(this.nroConta < c.getNroConta()) return -1;
-      return 0;
-   }
-
-
-   @Override
-   public boolean equals(Object obj) {
-
-      if(obj.getClass() == Conta.class){
-         Conta c = (Conta) obj;
-         return this.nroConta == c.getNroConta();
-      }
-      return false;
    }
 
 
