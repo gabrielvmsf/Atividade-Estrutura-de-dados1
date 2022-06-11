@@ -64,16 +64,21 @@ public abstract class Úsuario {
         this.qtdRenovações = qtdRenovações;
     }
 
+
+    public double getMulta() {
+        return this.multa;
+    }
+
+    public void setMulta(double multa) {
+        this.multa = multa;
+    }
+
+
     public abstract boolean emprestimo(Publicações publicação);
 
     public void renovarEmprestimo(Publicações publicação) {
         this.qtdRenovações++;
     }
 
-    public double devolverEmprestimo(Publicações publicação) {
-        if (qtdRenovações > 3) {
-            return this.multa = (qtdRenovações - 3) * publicação.getValorMulta();
-        }
-        return this.multa = 0;
-    }
+    public abstract double devolverEmprestimo(Publicações publicação);
 }

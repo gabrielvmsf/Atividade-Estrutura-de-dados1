@@ -25,5 +25,17 @@ public class ÚsuarioComum extends Úsuario {
         }
         return false;
     }
+    @Override
+    public double devolverEmprestimo(Publicações publicação){
+        qtdEmprestimos--;
+        if (getQtdRenovações() > 3) {
+            this.setMulta((getQtdRenovações()  - 3) * publicação.getValorMulta());
+            setQtdRenovações(0);
+            return getMulta();
+        }
+        setQtdRenovações(0);
+        setMulta(0);
+        return getMulta();
+    }
 
 }
