@@ -30,17 +30,9 @@ public class App {
                 int numIdentificador = scan.nextInt();
                 Avião avião = new Avião(nome, numIdentificador);
                 decolagem.inserir(avião);
-                System.out.println("inicio = "+decolagem.getInicio());
             } else if (opção == 4) {
-                FilaDecolagem f1 = decolagem;
                 int i = 0;
-                while (!(decolagem.isEmpty())) {
-                    System.out.println("o avião da fila da posição " + i + " tem o identificador "
-                            + decolagem.retirar().getNumIdentificador() + " e nome " + decolagem.retirar().getNome());
-                    i++;
-                }
-
-                decolagem = f1;
+                decolagem.mostrar();
             } else if (opção == 5) {
                 System.out.println("inicio = "+decolagem.getInicio());
                 System.out.println("o primeiro avião da fila tem o identificador "

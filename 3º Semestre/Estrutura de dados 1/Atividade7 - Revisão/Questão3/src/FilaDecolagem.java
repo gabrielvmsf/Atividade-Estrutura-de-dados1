@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 public class FilaDecolagem {
     int inicio;
     int fim;
@@ -6,12 +8,19 @@ public class FilaDecolagem {
     Avião f[];
 
     public FilaDecolagem() {
-        this.inicio = fim = -1;
+        this.inicio = this.fim = -1;
         this.tamanho = 500;
         this.f = new Avião[tamanho];
         this.qtdeElementos = 0;
     }
 
+    public void mostrar(){
+        String elementos = "";
+            for (int i = inicio; i<=fim; i++) {
+                elementos += "Identificador: " +f[i].getNumIdentificador()+ "/ Nome: "+f[i].getNome();
+                System.out.println(elementos);
+            }
+    }
 
 
     public void inserir(Avião e){
@@ -29,7 +38,7 @@ public class FilaDecolagem {
         Avião e = null;
         if (! isEmpty() ){
             e = f[inicio];
-            this.inicio++;
+            inicio++;
             qtdeElementos--;
         }
         return e;
