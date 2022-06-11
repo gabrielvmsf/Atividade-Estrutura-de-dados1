@@ -9,5 +9,5 @@ public class ÚsuarioEspecial extends Úsuario {
         setPublicaçãoEmprestada(publicação);
         return false;
     }
-    
+
 }

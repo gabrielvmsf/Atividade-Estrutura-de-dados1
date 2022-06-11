@@ -6,7 +6,7 @@ public class Artigos extends Publicações {
 
     public Artigos(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
             ArrayList<Autor> autores, String resumo, double valorMulta) {
-                super(dataPublicação, titulo, publicaçõesReferências, autores,0,valorMulta);
+        super(dataPublicação, titulo, publicaçõesReferências, autores, 0, valorMulta);
         this.resumo = resumo;
     }
 
@@ -17,6 +17,5 @@ public class Artigos extends Publicações {
     public void setResumo(String resumo) {
         this.resumo = resumo;
     }
-    
 
 }

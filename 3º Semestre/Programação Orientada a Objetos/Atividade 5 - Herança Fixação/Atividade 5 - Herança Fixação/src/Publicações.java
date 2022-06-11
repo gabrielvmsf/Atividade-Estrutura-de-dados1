@@ -8,7 +8,8 @@ public abstract class Publicações {
     private int qtdEmprestado;
     private double valorMulta;
 
-    public Publicações(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências, ArrayList<Autor> autores,int qtdEmprestado,double valorMulta) {
+    public Publicações(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
+            ArrayList<Autor> autores, int qtdEmprestado, double valorMulta) {
         this.dataPublicação = dataPublicação;
         this.titulo = titulo;
         this.publicaçõesReferências = publicaçõesReferências;
@@ -16,7 +17,6 @@ public abstract class Publicações {
         this.qtdEmprestado = qtdEmprestado;
         this.valorMulta = valorMulta;
     }
-
 
     public String getDataPublicação() {
         return this.dataPublicação;
@@ -65,6 +65,5 @@ public abstract class Publicações {
     public void setValorMulta(double valorMulta) {
         this.valorMulta = valorMulta;
     }
-    
 
 }

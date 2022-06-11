@@ -7,8 +7,9 @@ public class Teses extends Publicações {
     private String instituiçãoTeseDefendida;
 
     public Teses(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
-            ArrayList<Autor> autores,int numPag, String resumo, String dataDefesa, String instituiçãoTeseDefendida,double valorMulta) {
-        super(dataPublicação, titulo, publicaçõesReferências, autores,0,valorMulta);
+            ArrayList<Autor> autores, int numPag, String resumo, String dataDefesa, String instituiçãoTeseDefendida,
+            double valorMulta) {
+        super(dataPublicação, titulo, publicaçõesReferências, autores, 0, valorMulta);
         this.numPag = numPag;
         this.resumo = resumo;
         this.dataDefesa = dataDefesa;
@@ -46,6 +47,5 @@ public class Teses extends Publicações {
     public void setInstituiçãoTeseDefendida(String instituiçãoTeseDefendida) {
         this.instituiçãoTeseDefendida = instituiçãoTeseDefendida;
     }
-    
-    
+
 }
