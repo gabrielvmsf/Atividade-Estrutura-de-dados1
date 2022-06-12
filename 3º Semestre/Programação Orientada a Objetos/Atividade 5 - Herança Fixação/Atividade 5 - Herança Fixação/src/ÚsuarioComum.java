@@ -1,6 +1,7 @@
 public class ÚsuarioComum extends Úsuario {
 
     private int qtdEmprestimos;
+    private Publicações publicaçãoEmprestada;
 
     public ÚsuarioComum(String nome, String telefone, String email, String cpf) {
         super(nome, telefone, email, cpf);
@@ -13,6 +14,14 @@ public class ÚsuarioComum extends Úsuario {
 
     public void setQtdEmprestimos(int qtdEmprestimos) {
         this.qtdEmprestimos = qtdEmprestimos;
+    }
+
+    public Publicações getPublicaçãoEmprestada() {
+        return this.publicaçãoEmprestada;
+    }
+
+    public void setPublicaçãoEmprestada(Publicações publicaçãoEmprestada) {
+        this.publicaçãoEmprestada = publicaçãoEmprestada;
     }
 
     @Override
@@ -28,6 +37,9 @@ public class ÚsuarioComum extends Úsuario {
     @Override
     public double devolverEmprestimo(Publicações publicação){
         qtdEmprestimos--;
+        publicação.setQtdEmprestado(0);
+        publicaçãoEmprestada = null;
+        
         if (getQtdRenovações() > 3) {
             this.setMulta((getQtdRenovações()  - 3) * publicação.getValorMulta());
             setQtdRenovações(0);

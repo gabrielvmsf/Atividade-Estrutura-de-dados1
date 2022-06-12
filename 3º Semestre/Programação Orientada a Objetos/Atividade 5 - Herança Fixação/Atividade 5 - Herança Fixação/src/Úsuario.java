@@ -3,7 +3,6 @@ public abstract class Úsuario {
     private String telefone;
     private String email;
     private String cpf;
-    private Publicações publicaçãoEmprestada;
     private int qtdRenovações;
     private double multa;
 
@@ -48,13 +47,7 @@ public abstract class Úsuario {
         this.cpf = cpf;
     }
 
-    public Publicações getPublicaçãoEmprestada() {
-        return this.publicaçãoEmprestada;
-    }
-
-    public void setPublicaçãoEmprestada(Publicações publicaçãoEmprestada) {
-        this.publicaçãoEmprestada = publicaçãoEmprestada;
-    }
+    
 
     public int getQtdRenovações() {
         return this.qtdRenovações;
