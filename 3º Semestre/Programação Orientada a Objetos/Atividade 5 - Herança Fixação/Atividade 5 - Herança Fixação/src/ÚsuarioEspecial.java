@@ -10,9 +10,11 @@ public class ÚsuarioEspecial extends Úsuario {
 
     @Override
     public boolean emprestimo(Publicações publicação) {
+        if(publicação.getQtdEmprestado()==0){
         publicação.setQtdEmprestado(1);
         publicaçõesEmprestadas.add(publicação);
-        return true;
+        return true;}
+        return false;
     }
 
     @Override
