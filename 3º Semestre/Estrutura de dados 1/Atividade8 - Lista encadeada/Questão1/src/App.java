@@ -15,7 +15,6 @@ public class App {
             num = rand.nextInt(i);
             L.retirarIndice(num);
             i--;
-
         }while (L.getTamanho() > 1 && i > 0);
 
         System.out.println("O ganhador/sobrevivente foi a pessoa número:"+L.retirarInicio().getNum());
