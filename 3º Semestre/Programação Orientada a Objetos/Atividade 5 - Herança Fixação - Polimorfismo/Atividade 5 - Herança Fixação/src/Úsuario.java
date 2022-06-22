@@ -1,10 +1,12 @@
+import java.util.ArrayList;
+
 public abstract class Úsuario {
     private String nome;
     private String telefone;
     private String email;
     private String cpf;
     private int qtdRenovações;
-    private double multa;
+    private ArrayList<Emprestimo> emprestimosRealizados = new ArrayList<Emprestimo>();
 
     public Úsuario(String nome, String telefone, String email, String cpf) {
         this.nome = nome;
@@ -12,7 +14,6 @@ public abstract class Úsuario {
         this.email = email;
         this.cpf = cpf;
         this.qtdRenovações = 0;
-        this.multa = 0.00;
     }
 
     public String getNome() {
@@ -47,8 +48,6 @@ public abstract class Úsuario {
         this.cpf = cpf;
     }
 
-    
-
     public int getQtdRenovações() {
         return this.qtdRenovações;
     }
@@ -57,21 +56,19 @@ public abstract class Úsuario {
         this.qtdRenovações = qtdRenovações;
     }
 
-
-    public double getMulta() {
-        return this.multa;
+    public boolean realizarEmprestimo(Publicações publicação, Úsuario usuario) {
+        Emprestimo emprestimo = new Emprestimo(publicação, usuario);
+        emprestimosRealizados.add(emprestimo);
+        return true;
     }
 
-    public void setMulta(double multa) {
-        this.multa = multa;
+    public boolean devolverEmprestimo(Emprestimo emprestimo, Úsuario usuario) {
+        if (emprestimosRealizados.contains(emprestimo)) {
+            Publicações publicação = emprestimo.getPublicação();
+            emprestimo.devolverEmprestimo(publicação, usuario);
+            emprestimosRealizados.remove(emprestimo);
+            return true;
+        }
+        return false;
     }
-
-
-    public abstract boolean emprestimo(Publicações publicação);
-
-    public void renovarEmprestimo(Publicações publicação) {
-        this.qtdRenovações++;
-    }
-
-    public abstract double devolverEmprestimo(Publicações publicação);
 }
