@@ -58,12 +58,23 @@ public abstract class Úsuario {
 
     public boolean realizarEmprestimo(Publicações publicação, Úsuario usuario) {
         Emprestimo emprestimo = new Emprestimo(publicação, usuario);
-        emprestimosRealizados.add(emprestimo);
+        if(emprestimo.isVerificarDisponibilidade()) emprestimosRealizados.add(emprestimo); //só vai adicionar o emprestimo caso tenha retornado como verdadeiro
+
         return true;
     }
 
-    public boolean devolverEmprestimo(Emprestimo emprestimo, Úsuario usuario) {
+    public boolean realizarRenovação(Emprestimo emprestimo) {
         if (emprestimosRealizados.contains(emprestimo)) {
+            Publicações publicação = emprestimo.getPublicação();
+            emprestimo.renovarEmprestimo(publicação);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean devolverEmprestimo(Emprestimo emprestimo) {
+        if (emprestimosRealizados.contains(emprestimo)) {
+            Úsuario usuario = emprestimo.getUsuario();
             Publicações publicação = emprestimo.getPublicação();
             emprestimo.devolverEmprestimo(publicação, usuario);
             emprestimosRealizados.remove(emprestimo);

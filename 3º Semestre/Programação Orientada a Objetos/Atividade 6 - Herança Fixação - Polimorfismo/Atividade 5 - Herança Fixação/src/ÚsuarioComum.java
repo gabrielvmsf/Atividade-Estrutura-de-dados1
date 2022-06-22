@@ -1,7 +1,7 @@
 public class ÚsuarioComum extends Úsuario {
 
     private int qtdEmprestimos;
-    private Publicações publicaçãoEmprestada;
+    private Emprestimo emprestimoAtual;
 
     public ÚsuarioComum(String nome, String telefone, String email, String cpf) {
         super(nome, telefone, email, cpf);
@@ -16,38 +16,27 @@ public class ÚsuarioComum extends Úsuario {
         this.qtdEmprestimos = qtdEmprestimos;
     }
 
-    public Publicações getPublicaçãoEmprestada() {
-        return this.publicaçãoEmprestada;
+    public Emprestimo getEmprestimoAtual() {
+        return this.emprestimoAtual;
     }
 
-    public void setPublicaçãoEmprestada(Publicações publicaçãoEmprestada) {
-        this.publicaçãoEmprestada = publicaçãoEmprestada;
+    public void setEmprestimoAtual(Emprestimo emprestimoAtual) {
+        this.emprestimoAtual = emprestimoAtual;
     }
 
     @Override
-    public boolean emprestimo(Publicações publicação) {
-        if (publicação.getQtdEmprestado() == 0 && getQtdEmprestimos() == 0) {
-            publicação.setQtdEmprestado(1);
-            setQtdEmprestimos(1);
-            setPublicaçãoEmprestada(publicação);
+    public boolean realizarEmprestimo(Publicações publicação, Úsuario usuario) {
+        if (getQtdEmprestimos() == 0) {
+            qtdEmprestimos=1;
+            super.realizarEmprestimo(publicação,usuario);
             return true;
         }
         return false;
     }
-    @Override
-    public double devolverEmprestimo(Publicações publicação){
-        qtdEmprestimos--;
-        publicação.setQtdEmprestado(0);
-        publicaçãoEmprestada = null;
-        
-        if (getQtdRenovações() > 3) {
-            this.setMulta((getQtdRenovações()  - 3) * publicação.getValorMulta());
-            setQtdRenovações(0);
-            return getMulta();
-        }
-        setQtdRenovações(0);
-        setMulta(0);
-        return getMulta();
-    }
 
+    @Override
+    public boolean devolverEmprestimo(Emprestimo emprestimo) {
+        qtdEmprestimos = 0;
+        return super.devolverEmprestimo(emprestimo);
+    }
 }
