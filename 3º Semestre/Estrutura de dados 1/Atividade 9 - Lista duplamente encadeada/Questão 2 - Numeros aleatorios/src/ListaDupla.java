@@ -149,6 +149,22 @@ public class ListaDupla {
             return (builder.toString());
         }
     }
+    String ImprimirInverso() {
+        if (this.TotaldeElementos == 0) {
+            return ("[]");
+        } else {
+            StringBuilder builder = new StringBuilder("[");
+            Celula atual = this.Ultima;
+            for (int i = 0; i < this.TotaldeElementos - 1; i++) {
+                builder.append(atual.getElemento());
+                builder.append(", ");
+                atual = atual.getAnterior();
+            }
+            builder.append(atual.getElemento());
+            builder.append("]");
+            return (builder.toString());
+        }
+    }
 
     void Ordenar(){
         for (int i = 0; i < this.TotaldeElementos - 1; i++) {
