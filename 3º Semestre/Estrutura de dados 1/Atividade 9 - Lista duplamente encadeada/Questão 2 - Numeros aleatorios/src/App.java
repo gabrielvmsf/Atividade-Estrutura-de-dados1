@@ -10,13 +10,13 @@ public class App {
         for(int i=0; i<1000 ;i++){
             int numero = rand.nextInt(-10000, 10000);
             ordem[i]=numero;
-            //System.out.println(ordem[i]);
+            System.out.println(ordem[i]);
         }
         Arrays.sort(ordem);
         for(int i=0; i<1000 ;i++){
             ld.Adiciona(ordem[i]);
         }
-        //System.out.println(ld.Imprimir());
+        System.out.println(ld.Imprimir());
         
         /*ld.EsvaziaLista();
 
