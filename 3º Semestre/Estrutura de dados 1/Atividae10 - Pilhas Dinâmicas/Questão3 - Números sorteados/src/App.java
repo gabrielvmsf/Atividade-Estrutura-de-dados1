@@ -1,40 +1,36 @@
 import java.util.Random;
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Scanner scan = new Scanner(System.in);
-        StackDinamica par = new StackDinamica();
-        StackDinamica impar = new StackDinamica();
-        int num = 1;
-        System.out.println("Escreva valores de -127 a 128 \n(0) finaliza a leitura de dados!");
-        while(true){
-            num = scan.nextInt();
-
-            if(num == 0) break;
-            if(num%2==0){
-                par.push(num);
-            } else impar.push(num);
-        }
-        while(!par.isEmpyt()||!impar.isEmpyt()){
-            impar.pop();
-            if(impar.isEmpyt()) break;
-            par.pop();
-            if(par.isEmpyt()) break;
-        }
-        if(!par.isEmpyt()){
-            System.out.println("A pilha par ainda possui elementos! total de elementos: "+par.sizePilha());
-            System.out.println("Elementos par que não foram retirados:");
-            while(!par.isEmpyt()){
-                System.out.print(par.pop()+" ");
-            }
-        } else if(!impar.isEmpyt()){
-            System.out.println("A pilha impar ainda possui elementos! total de elementos: "+impar.sizePilha());
-            System.out.println("Elementos impar que não foram retirados:");
-            while(!impar.isEmpyt()){
-                System.out.print(impar.pop()+" ");
+        Random rand = new Random();
+        StackDinamica p1 = new StackDinamica();
+        StackDinamica p2 = new StackDinamica();
+        StackDinamica p3 = new StackDinamica();
+        
+        for(int i = 0; i<100;i++){
+            int num = rand.nextInt(1,10);
+            if(num >= 1 && num <=3){
+                p1.push(num);
+            } else if(num >= 4 && num <=6){
+                p2.push(num);
+            } else if(num >= 7 && num <=9){
+                p3.push(num);
             }
         }
-
+        for(int i = 0; i<100;i++){
+            int num = rand.nextInt(1,4);
+            System.out.print(num+ " ");
+            if(num == 1){
+                p1.push(p2.pop());
+                p1.push(p3.pop());
+            } else if(num == 2){
+                p2.push(p1.pop());
+                p2.push(p3.pop());
+            } else if(num == 3){
+                p3.push(p1.pop());
+                p3.push(p2.pop());
+            }
+        }
+        p1.imprimir(p2,p3);
     }
 }
