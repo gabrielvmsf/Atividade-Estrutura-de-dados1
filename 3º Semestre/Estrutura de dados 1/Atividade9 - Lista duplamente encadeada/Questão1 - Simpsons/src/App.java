@@ -12,16 +12,27 @@ public class App {
         ld.Adiciona(0, "Bart");
         ld.Adiciona(1, "Moll");
         System.out.println(ld.Imprimir());
+        ld.EsvaziaLista();
 
         ld.Adiciona("Homer");
         ld.Adiciona("Bart");
         ld.AdicionaNoComeco("Lisa");
-
+        
         System.out.println(ld.Imprimir());
         System.out.println(ld.tamanho());
         
 
         ld.EsvaziaLista();
+        System.out.println(ld.Imprimir());
+
+        ld.Adiciona("Homer");
+        ld.Adiciona("Maggie");
+        ld.Adiciona(0, "Bart");
+        ld.Adiciona(1, "Marge");
+        System.out.println(ld.Imprimir());
+        System.out.println("Lisa:"+ld.Contem("Lisa"));
+        ld.EsvaziaLista();
+
 
         ld.Adiciona("Homer");
         ld.Adiciona("Bart");
@@ -29,7 +40,7 @@ public class App {
         System.out.println(ld.tamanho());
         
 
-        System.out.println("Marge: "+ld.Contem("Marge")+"Homer: "+ld.Contem("Homer")+"Bart: "+ld.Contem("Bart")+"Maggie: "+ld.Contem("Maggie"));
+        System.out.println("Marge: "+ld.Contem("Marge")+" Homer: "+ld.Contem("Homer")+" Bart: "+ld.Contem("Bart")+" Maggie: "+ld.Contem("Maggie"));
         System.out.println(ld.Imprimir());
         System.out.println(ld.tamanho());
         
@@ -38,7 +49,7 @@ public class App {
 
         ld.AdicionaNoComeco("Homer");
         ld.AdicionaNoComeco("Bart");
-        ld.Adiciona(1, "Marge");
+        ld.Adiciona("Marge");
         ld.Adiciona(1, "Maggie");
         ld.AdicionaNoComeco("Ned Flanders");
         ld.Adiciona("Sr. Burns");
@@ -47,22 +58,22 @@ public class App {
         ld.RemovedoFim();
         System.out.println(ld.Imprimir()); 
 
+        ld.Remove(1);
+        System.out.println(ld.Imprimir());
+        System.out.println(ld.tamanho());
+        
+
+        System.out.println("Marge: "+ld.Contem("Marge")+" Homer: "+ld.Contem("Homer")+" Bart: "+ld.Contem("Bart")+" Maggie: "+ld.Contem("Maggie"));
+        System.out.println(ld.Imprimir());
+        System.out.println(ld.tamanho());
+        
+
         ld.RemovedoComeco();
         System.out.println(ld.Imprimir());
         System.out.println(ld.tamanho());
         
 
-        System.out.println("Marge: "+ld.Contem("Marge")+"Homer: "+ld.Contem("Homer")+"Bart: "+ld.Contem("Bart")+"Maggie: "+ld.Contem("Maggie"));
-        System.out.println(ld.Imprimir());
-        System.out.println(ld.tamanho());
-        
-
-        ld.RemovedoComeco();
-        System.out.println(ld.Imprimir());
-        System.out.println(ld.tamanho());
-        
-
-        System.out.println("Marge: "+ld.Contem("Marge")+"Homer: "+ld.Contem("Homer")+"Bart: "+ld.Contem("Bart")+"Maggie: "+ld.Contem("Maggie"));
+        System.out.println("Marge: "+ld.Contem("Marge")+" Homer: "+ld.Contem("Homer")+" Bart: "+ld.Contem("Bart")+" Maggie: "+ld.Contem("Maggie"));
         System.out.println(ld.Imprimir());
         System.out.println(ld.tamanho());
         

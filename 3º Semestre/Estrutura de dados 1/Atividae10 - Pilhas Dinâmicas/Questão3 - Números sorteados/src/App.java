@@ -19,7 +19,6 @@ public class App {
         }
         for(int i = 0; i<100;i++){
             int num = rand.nextInt(1,4);
-            System.out.print(num+ " ");
             if(num == 1){
                 p1.push(p2.pop());
                 p1.push(p3.pop());

@@ -61,33 +61,27 @@ public class StackDinamica {
                     p = p.getAnterior();
                     p2 = p2.getAnterior();
                 } else if (p != null && p3 != null) {
-
                     System.out.println(p.getDado() + "             " + "              " + p3.getDado());
                     p = p.getAnterior();
                     p3 = p3.getAnterior();
-
                 } else if (p2 != null && p3 != null) {
-
                     System.out.println("              " + p2.getDado() + "             " + p3.getDado());
                     p2 = p2.getAnterior();
                     p3 = p3.getAnterior();
-
                 } else if (p != null) {
-                    System.out.println(p.getDado()+"               " + "             " );
+                    System.out.println(p.getDado() + "               " + "             ");
                     p = p.getAnterior();
                 } else if (p2 != null) {
-                    System.out.println("               " +p2.getDado()+ "             " );
+                    System.out.println("               " + p2.getDado() + "             ");
                     p2 = p2.getAnterior();
                 } else if (p3 != null) {
-                    System.out.println("               " + "             "+p3.getDado() );
+                    System.out.println("               " + "             " + p3.getDado());
                     p3 = p3.getAnterior();
                 }
             }
 
         }
     }
-
-    
 
     public CelulaPilha top() {
         if (isEmpyt()) {
