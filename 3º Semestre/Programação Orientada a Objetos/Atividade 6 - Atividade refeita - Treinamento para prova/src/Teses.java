@@ -1,20 +1,22 @@
-import java.util.ArrayList;
+import java.sql.Date;
 
-public class Teses extends Publicações {
+public class Teses extends Publicação {
     private int numPag;
     private String resumo;
     private String dataDefesa;
     private String instituiçãoTeseDefendida;
+    private int numAutores;
 
-    public Teses(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
-            ArrayList<Autor> autores, int numPag, String resumo, String dataDefesa, String instituiçãoTeseDefendida,
-            double valorMulta) {
-        super(dataPublicação, titulo, publicaçõesReferências, autores, 0, valorMulta);
+
+    public Teses(int numPag, String resumo, String dataDefesa, String instituiçãoTeseDefendida, Date dataPublicação, String titulo, double valorMulta) {
+        super(dataPublicação, titulo, valorMulta);
         this.numPag = numPag;
         this.resumo = resumo;
         this.dataDefesa = dataDefesa;
         this.instituiçãoTeseDefendida = instituiçãoTeseDefendida;
+        this.numAutores = 0;
     }
+    
 
     public int getNumPag() {
         return this.numPag;
@@ -47,5 +49,20 @@ public class Teses extends Publicações {
     public void setInstituiçãoTeseDefendida(String instituiçãoTeseDefendida) {
         this.instituiçãoTeseDefendida = instituiçãoTeseDefendida;
     }
+
+    @Override
+    public void addAutor(Autor autor) {
+        if(this.numAutores==0){
+            this.numAutores=1;
+            super.addAutor(autor);
+        }
+    }
+
+    @Override
+    public void removeAutor(Autor autor) {
+        super.removeAutor(autor);
+        this.numAutores = 0;
+    }
+    
 
 }

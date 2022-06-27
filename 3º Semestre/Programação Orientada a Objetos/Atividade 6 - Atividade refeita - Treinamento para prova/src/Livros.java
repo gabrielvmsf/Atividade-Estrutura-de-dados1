@@ -1,18 +1,17 @@
-import java.util.ArrayList;
+import java.sql.Date;
 
-public class Livros extends Publicações {
+public class Livros extends Publicação {
     private int numEdição;
     private String nomeEditora;
     private String ISBN;
 
-    public Livros(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
-            ArrayList<Autor> autores,int numEdição, String nomeEditora, String ISBN, double valorMulta) {
-        super(dataPublicação, titulo, publicaçõesReferências, autores,0,valorMulta);
+
+    public Livros(int numEdição, String nomeEditora, String ISBN,Date dataPublicação, String titulo, double valorMulta) {
+        super(dataPublicação, titulo, valorMulta);
         this.numEdição = numEdição;
         this.nomeEditora = nomeEditora;
         this.ISBN = ISBN;
     }
-
 
     public int getNumEdição() {
         return this.numEdição;

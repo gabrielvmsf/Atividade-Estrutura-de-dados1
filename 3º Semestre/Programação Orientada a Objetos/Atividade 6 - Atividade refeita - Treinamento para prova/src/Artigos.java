@@ -1,12 +1,10 @@
-import java.util.ArrayList;
-
-public class Artigos extends Publicações {
+import java.sql.Date;
+public class Artigos extends Publicação {
 
     private String resumo;
 
-    public Artigos(String dataPublicação, String titulo, ArrayList<Publicações> publicaçõesReferências,
-            ArrayList<Autor> autores, String resumo, double valorMulta) {
-        super(dataPublicação, titulo, publicaçõesReferências, autores, 0, valorMulta);
+    public Artigos(Date dataPublicação, String titulo, double valorMulta, String resumo) {
+        super(dataPublicação, titulo, valorMulta);
         this.resumo = resumo;
     }
 
