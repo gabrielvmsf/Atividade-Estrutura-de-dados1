@@ -2,7 +2,7 @@
 Este projeto implementa um simulador de campo de visão em um ambiente 2D no Unity. A aplicação permite definir um retângulo ou quadrado delimitado por coordenadas X e Y máximas e mínimas, bem como configurar pontos de origem e destino para calcular a interseção entre o campo de visão e o retângulo/quadrado.
 
 ## Funcionalidades
-# O projeto inclui as seguintes funcionalidades:
+### O projeto inclui as seguintes funcionalidades:
 
 - Visualização do campo de visão em um ambiente 2D.
 - Definição de um retângulo ou quadrado delimitado por coordenadas.
@@ -23,7 +23,7 @@ Interseção com o Retângulo/Quadrado
 Contribuição
 - Sinta-se à vontade para contribuir com melhorias ou correções neste projeto. Basta fazer um fork do repositório, criar uma nova branch para sua contribuição e enviar um pull request quando estiver pronto.
 
-## O programa já vem configurado com algumas definições padrão:
+### O programa já vem configurado com algumas definições padrão:
 - Coordenada X Mínima: 10
 - Coordenada X Máxima: 25
 - Coordenada Y Mínima: 10
@@ -33,13 +33,13 @@ Contribuição
 - Coordenada X2: 15
 - Coordenada Y2: 17
 
-# Alteração de Configurações:
+### Alteração de Configurações:
 - Para modificar qualquer um dos campos, basta inserir o novo valor desejado e clicar em "Confirmar".
 
-# Campo Vazio:
+### Campo Vazio:
 - Se você selecionar um campo e não inserir nenhum valor, o campo correspondente retornará "0" como entrada.
 
-# Interseção com o Retângulo/Quadrado:
+### Interseção com o Retângulo/Quadrado:
 - A aplicação calcula a interseção do campo de visão com o retângulo ou quadrado definido pelas coordenadas máximas e mínimas.
 - A interseção é destacada na visualização para mostrar a área em que o campo de visão se sobrepõe ao retângulo/quadrado.
 
