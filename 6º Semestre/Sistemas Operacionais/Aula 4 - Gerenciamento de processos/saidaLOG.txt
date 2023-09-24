@@ -1,0 +1,12 @@
+----------------------------------------------------------------
+PID: 4 - Estado: TERMINATED - Tempo de processamento:3000
+PID: 6 - Estado: TERMINATED - Tempo de processamento:2000
+PID: 3 - Estado: TERMINATED - Tempo de processamento:3000
+PID: 8 - Estado: TERMINATED - Tempo de processamento:4000
+PID: 1 - Estado: TERMINATED - Tempo de processamento:5000
+PID: 2 - Estado: TERMINATED - Tempo de processamento:7000
+PID: 7 - Estado: TERMINATED - Tempo de processamento:5000
+PID: 5 - Estado: TERMINATED - Tempo de processamento:8000
+PID: 0 - Estado: TERMINATED - Tempo de processamento:10000
+PID: 9 - Estado: TERMINATED - Tempo de processamento:10000
+----------------------------------------------------------------
