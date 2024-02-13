@@ -25,17 +25,20 @@ void main(List<String> args) {
   List<int> lista = numero.split('').map(int.parse).toList();
   int pontuacao = 0;
 
+  bool segundo = false;
+
   for (int i = lista.length - 1; i >= 0; i--) {
-    if (i % 2 == 0) {
+    if (segundo) {
       lista[i] *= 2;
 
       if (lista[i] > 9) {
         lista[i] = lista[i] - 9;
       }
-
       pontuacao += lista[i];
+      segundo = false;
     } else {
       lista[i] = 0;
+      segundo = true;
     }
   }
 
