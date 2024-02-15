@@ -37,7 +37,7 @@ void main(List<String> args) {
       pontuacao += lista[i];
       segundo = false;
     } else {
-      lista[i] = 0;
+      pontuacao += lista[i];
       segundo = true;
     }
   }
