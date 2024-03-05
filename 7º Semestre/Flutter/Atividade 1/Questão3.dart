@@ -49,5 +49,6 @@ void main(List<String> args) {
     print("Numero válido");
   } else {
     print("Numero Inválido");
+    print("socorro");
   }
 }
