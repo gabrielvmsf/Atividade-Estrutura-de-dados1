@@ -1,1 +1,1 @@
-# Atividades / códigos para praticar - Faculdade
+# Atividades para praticar - Faculdade
