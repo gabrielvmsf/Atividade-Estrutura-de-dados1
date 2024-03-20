@@ -42,7 +42,7 @@ router.put('/video/edit', videoValidator.manipulateVideo, videoControler.editVid
 router.post('/substation/add', substationValidator.manipulateSubstation, substationControler.addSubstation);
 router.get('/substation/listName', substationControler.getSubstation);
 router.get('/substation/listAll', substationControler.listAllSubstations);
-router.delete('/substation/delete/:id', substationControler.deleteSubstation);
-router.put('/substation/edit/:id', substationValidator.manipulateSubstation, substationControler.updateSubstation);
+router.delete('/substation/delete', substationControler.deleteSubstation);
+router.put('/substation/edit', substationValidator.manipulateSubstation, substationControler.updateSubstation);
 
 module.exports = router;

@@ -12,21 +12,8 @@ module.exports = {
         }
 
         const data = matchedData(req);
-        const newSubstation = new Substation();
-        newSubstation.name = data.name;
-        newSubstation.description = data.description;
-        newSubstation.location = data.location;
-        newSubstation.capacity = data.capacity;
-        newSubstation.voltage = data.voltage;
-        newSubstation.substationType = data.substationType;
-        newSubstation.numberOfTransformers = data.numberOfTransformers;
-        newSubstation.transformerPower = data.transformerPower;
-        newSubstation.yearBuilt = data.yearBuilt;
-        newSubstation.owner = data.owner;
-        newSubstation.condition = data.condition;
-        newSubstation.lastCheck = data.lastCheck;
-        newSubstation.nextScheduledMaintenance = data.nextScheduledMaintenance;
-        
+        const newSubstation = new Substation(data);
+
         try {
             const savedSubstation = await newSubstation.save();
             res.json(savedSubstation);
@@ -36,10 +23,10 @@ module.exports = {
     },
 
     getSubstation: async (req, res) => {
-        const id = req.params.id;
+        const name = req.params.name;
 
         try {
-            const substation = await Substation.find(id);
+            const substation = await Substation.find(name);
             if (!substation) {
                 res.status(404).json({ error: 'Subestação não encontrada' });
                 return;
@@ -52,7 +39,7 @@ module.exports = {
 
     listAllSubstations: async (req, res) => {
         try {
-            const allSubstations = await Substation.find({ name: name });
+            const allSubstations = await Substation.find();
             res.json(allSubstations);
         } catch (error) {
             res.status(500).json({ error: error.message });
@@ -60,7 +47,7 @@ module.exports = {
     },
 
     deleteSubstation: async (req, res) => {
-        const id = req.params.id;
+        let name = req.query.name
 
         try {
             const deletedSubstation = await Substation.find({ name: name });
@@ -83,11 +70,12 @@ module.exports = {
             return;
         }
 
-        const id = req.params.id;
+        let name = req.query.name;
+
         const data = matchedData(req);
 
         try {
-            const updatedSubstation = await Substation.findAndUpdate({ name: data.name }, { $set: data });
+            const updatedSubstation = await Substation.findOneAndUpdate({ name: data.name }, { $set: data });
             if (!updatedSubstation) {
                 res.status(404).json({ error: 'Subestação não encontrada' });
                 return;

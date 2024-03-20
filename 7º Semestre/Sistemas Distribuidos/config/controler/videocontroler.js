@@ -1,4 +1,4 @@
-const Video = require('../model/Video');
+const Video = require('../model/video');
 const { validationResult, matchedData } = require('express-validator');
 
 module.exports = {
@@ -12,11 +12,10 @@ module.exports = {
         }
         const data = matchedData(req);
         const newVideo = new Video();
-        newVideo.title = data.tile;
+        newVideo.title = data.tititletle;
         newVideo.dataCreated = Date.now();
         newVideo.description = data.description;
-        newVideo.time = data.time;
-        newVideo.creatortitle = data.creatortitle;
+        newVideo.creatorName = data.creatorName;
 
         const info = await newVideo.save();
         res.json({ info });

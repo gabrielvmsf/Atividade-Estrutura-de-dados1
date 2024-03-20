@@ -6,11 +6,11 @@ const modelSchema = new mongoose.Schema({
     dateCreated:Date,
     description:String,
     time:String,
-    creatorName:Number,
+    creatorName:String,
     status:{type:Boolean, default:true}
 });
 
-const modelName = "Textual";
+const modelName = "Video";
 
 if(mongoose.connection && mongoose.connection.models[modelName]){
     module.exports = mongoose.connection.models[modelName];

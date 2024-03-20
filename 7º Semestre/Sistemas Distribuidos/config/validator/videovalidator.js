@@ -7,7 +7,7 @@ module.exports = {
             isLength:{
                 options: {min:5}
             },
-            errorMessage: 'title precisa de pelo menos 2 caracteres'
+            errorMessage: 'title precisa de pelo menos 5 caracteres'
         },
         time: {
             isLength: {
@@ -20,7 +20,8 @@ module.exports = {
             isLength:{
                 options: {min:5}
             },
-            errorMessage: 'nome precisa de pelo menos 2 caracteres'
-        }
+            errorMessage: 'nome precisa de pelo menos 5 caracteres'
+        },
+        
     })
 };
