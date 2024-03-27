@@ -1,6 +1,6 @@
 import 'package:anuncios/add_anuncio.dart';
 import 'package:anuncios/anuncio.dart';
-import 'package:anuncios/edit_anuncio.dart'; // Import the EditAnuncio class
+import 'package:anuncios/edit_anuncio.dart'; 
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
