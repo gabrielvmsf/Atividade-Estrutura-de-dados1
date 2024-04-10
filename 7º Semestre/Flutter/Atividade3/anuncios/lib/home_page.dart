@@ -1,6 +1,7 @@
 import 'package:anuncios/add_anuncio.dart';
 import 'package:anuncios/anuncio.dart';
-import 'package:anuncios/edit_anuncio.dart'; 
+import 'package:anuncios/edit_anuncio.dart';
+import 'package:anuncios/noticiaHelper.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,20 +12,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  void _addAnuncio() {
+  AnunciosHelper _helper = AnunciosHelper();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _helper.getAll().then((data) {
+      if (data != null) {
+        setState(() {
+          Anuncio.listaDeAnuncios = data.toList();
+        });
+      }
+    });
+    super.didChangeDependencies();
+  }
+
+  void _addAnuncio() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddAnuncio()),
-    ).then((result) {
+    ).then((result) async {
       if (result != null && result is Anuncio) {
         setState(() {
           Anuncio.listaDeAnuncios.add(result);
         });
+        await _helper.saveAnuncio(result);
       }
     });
   }
 
-  void _editAnuncio(int index) {
+  void _editAnuncio(int index) async {
     final Anuncio anuncio = Anuncio.listaDeAnuncios[index];
     Navigator.push(
       context,
@@ -36,11 +57,12 @@ class _HomePageState extends State<HomePage> {
           index: index,
         ),
       ),
-    ).then((result) {
+    ).then((result) async {
       if (result != null && result is Anuncio) {
         setState(() {
           Anuncio.listaDeAnuncios[index] = result;
         });
+        await _helper.editAnuncio(result);
       }
     });
   }
@@ -167,13 +189,15 @@ class _HomePageState extends State<HomePage> {
                           style: const TextStyle(fontSize: 18),
                         ),
                         PopupMenuButton<String>(
-                          onSelected: (value) {
+                          onSelected: (value) async {
                             if (value == 'editar') {
                               _editAnuncio(index);
                             } else if (value == 'deletar') {
                               setState(() {
                                 Anuncio.listaDeAnuncios.removeAt(index);
                               });
+                              await _helper.deleteAnuncio(
+                                  Anuncio.listaDeAnuncios[index]);
                             }
                           },
                           itemBuilder: (BuildContext context) => [

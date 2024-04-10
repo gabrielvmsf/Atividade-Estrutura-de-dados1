@@ -111,7 +111,7 @@ class _EditAnuncioState extends State<EditAnuncio> {
                 child: ElevatedButton(
                   onPressed: _enviarFormulario,
                   child: const Text(
-                    'Adicionar Anúncio',
+                    'Editar Anúncio',
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
