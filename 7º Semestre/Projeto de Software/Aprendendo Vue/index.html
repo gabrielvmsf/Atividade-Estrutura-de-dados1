@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Subestação</title>
+    <style>
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-family: Arial, sans-serif;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 70%;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        textarea {
+            height: 100px;
+        }
+        .coordinates {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        .coordinates label {
+            margin-bottom: 5px;
+        }
+        .coordinates input {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <h1>{{ titulo }}</h1>
+        <form @submit.prevent="submitForm">
+          <label for="name">Nome da subestação:</label><br>
+          <input type="text" id="name" v-model="substation.name" name="name"><br>
+          <label for="description">Breve descrição:</label><br>
+          <textarea id="description" v-model="substation.description" name="description"></textarea><br>
+          <label for="location">Localização:</label><br>
+          <input type="text" id="location" v-model="substation.location" name="location"><br>
+          <label for="capacity">Capacidade nominal (em MW):</label><br>
+          <input type="number" id="capacity" v-model="substation.capacity" name="capacity"><br>
+          <label for="voltage">Tensão de operação:</label><br>
+          <input type="text" id="voltage" v-model="substation.voltage" name="voltage"><br>
+          <label for="substationType">Tipo de subestação:</label><br>
+          <input type="text" id="substationType" v-model="substation.substationType" name="substationType"><br>
+          <label for="numberOfTransformers">Número de transformadores:</label><br>
+          <input type="number" id="numberOfTransformers" v-model="substation.numberOfTransformers" name="numberOfTransformers"><br>
+          <label for="transformerPower">Capacidade de cada transformador (em MVA):</label><br>
+          <input type="number" id="transformerPower" v-model="substation.transformerPower" name="transformerPower"><br>
+          <label for="protectionEquipment">Equipamentos de proteção:</label><br>
+          <input type="text" id="protectionEquipment" v-model="substation.protectionEquipment" name="protectionEquipment"><br>
+          <label for="yearBuilt">Ano de construção:</label><br>
+          <input type="number" id="yearBuilt" v-model="substation.yearBuilt" name="yearBuilt"><br>
+          <label for="owner">Proprietário:</label><br>
+          <input type="text" id="owner" v-model="substation.owner" name="owner"><br>
+          <label for="lastCheck">Última manutenção:</label><br>
+          <input type="date" id="lastCheck" v-model="substation.maintenance.lastCheck" name="lastCheck"><br>
+          <label for="nextScheduledMaintenance">Próxima manutenção:</label><br>
+          <input type="date" id="nextScheduledMaintenance" v-model="substation.maintenance.nextScheduledMaintenance" name="nextScheduledMaintenance"><br>
+          <label for="condition">Condição atual:</label><br>
+          <select id="condition" v-model="substation.condition" name="condition">
+            <option value="operacional">Operacional</option>
+            <option value="manutencao">Em manutenção</option>
+            <option value="desativado">Desativado</option>
+          </select><br>
+          <label for="networkConnections">Conexões de rede:</label><br>
+          <input type="text" id="networkConnections" v-model="substation.networkConnections" name="networkConnections"><br>
+          <label>Coordenadas:</label>
+          <div class="coordinates">
+            <input type="number" placeholder="X" v-model="substation.coordinates.x" name="x">
+            <input type="number" placeholder="Y" v-model="substation.coordinates.y" name="y">
+          </div>
+          <br>
+          <label for="direction">Direção:</label><br>
+          <select id="direction" v-model="substation.coordinates.direction" name="direction">
+            <option value="horizontal">Horizontal</option>
+            <option value="vertical">Vertical</option>
+          </select><br>
+          <input type="submit" value="Submeter">
+        </form>
+      </div>
+      
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+      <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          titulo: "Formulário de Subestação",
+          substation: {
+            name: '',
+            description: '',
+            location: '',
+            capacity: null,
+            voltage: '',
+            substationType: '',
+            numberOfTransformers: null,
+            transformerPower: null,
+            protectionEquipment: [],
+            yearBuilt: null,
+            owner: '',
+            maintenance: {
+              lastCheck: null,
+              nextScheduledMaintenance: null
+            },
+            condition: 'operacional',
+            networkConnections: [],
+            coordinates: {
+              x: null,
+              y: null,
+              direction: ''
+            }
+          }
+        },
+        methods: {
+          submitForm() {
+            console.log(this.substation);
+          }
+        }
+      })
+      </script>
+</body>
+</html>

@@ -3,6 +3,7 @@ import 'package:anuncios/anuncio.dart';
 import 'package:anuncios/edit_anuncio.dart';
 import 'package:anuncios/noticiaHelper.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -13,6 +14,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AnunciosHelper _helper = AnunciosHelper();
+
+  void launchWhatsappWithText(String message) async {
+    final url = "whatsapp://send?text=$message";
+    if (await canLaunchUrl(Uri.parse(Uri.encodeFull(url)))) {
+      await launchUrl(Uri.parse(Uri.encodeFull(url)));
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   void initState() {
@@ -54,6 +64,7 @@ class _HomePageState extends State<HomePage> {
           titulo: anuncio.title,
           descricao: anuncio.descricao,
           preco: anuncio.preco,
+          imageUrl: anuncio.imageUrl,
           index: index,
         ),
       ),
@@ -170,11 +181,23 @@ class _HomePageState extends State<HomePage> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: ListTile(
-                    leading: const Icon(
-                      Icons.hide_image_outlined,
-                      color: Colors.grey,
-                      size: 50,
-                    ),
+                    leading: anuncio.imageUrl != null
+                        ? Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              image: DecorationImage(
+                                image: NetworkImage(anuncio.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
+                        : const Icon(
+                            Icons.hide_image_outlined,
+                            color: Colors.grey,
+                            size: 50,
+                          ),
                     title: Text(anuncio.title.length > 50
                         ? '${anuncio.title.substring(0, 50)}...'
                         : anuncio.title),
@@ -196,8 +219,11 @@ class _HomePageState extends State<HomePage> {
                               setState(() {
                                 Anuncio.listaDeAnuncios.removeAt(index);
                               });
-                              await _helper.deleteAnuncio(
-                                  Anuncio.listaDeAnuncios[index]);
+                              await _helper.deleteAnuncio(anuncio);
+                            } else if (value == 'compartilhar') {
+                              final message =
+                                  "Anúncio:\n\nTítulo: ${anuncio.title}\nDescrição: ${anuncio.descricao}\nPreço: R\$${anuncio.preco.toStringAsFixed(2)}";
+                              launchWhatsappWithText(message);
                             }
                           },
                           itemBuilder: (BuildContext context) => [
@@ -208,6 +234,10 @@ class _HomePageState extends State<HomePage> {
                             const PopupMenuItem<String>(
                               value: 'deletar',
                               child: Text('Deletar'),
+                            ),
+                            const PopupMenuItem<String>(
+                              value: 'compartilhar',
+                              child: Text('Compartilhar'),
                             ),
                           ],
                         ),

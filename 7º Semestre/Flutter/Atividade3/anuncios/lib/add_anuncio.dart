@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:anuncios/anuncio.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddAnuncio extends StatefulWidget {
   const AddAnuncio({Key? key}) : super(key: key);
@@ -9,6 +12,18 @@ class AddAnuncio extends StatefulWidget {
 }
 
 class _AddAnuncioState extends State<AddAnuncio> {
+  final ImagePicker imagePicker = ImagePicker();
+  File? imageFile;
+
+  pick(ImageSource source) async {
+    final pickedFile = await imagePicker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        imageFile = File(pickedFile.path);
+      });
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _tituloController;
   late TextEditingController _descricaoController;
@@ -33,10 +48,10 @@ class _AddAnuncioState extends State<AddAnuncio> {
   void _enviarFormulario() {
     if (_formKey.currentState!.validate()) {
       Anuncio novoAnuncio = Anuncio(
-        _tituloController.text,
-        _descricaoController.text,
-        double.parse(_precoController.text),
-      );
+          _tituloController.text,
+          _descricaoController.text,
+          double.parse(_precoController.text),
+          imageFile!);
 
       Navigator.pop(context, novoAnuncio);
     }
@@ -61,6 +76,32 @@ class _AddAnuncioState extends State<AddAnuncio> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey,
+                  ),
+                  child: imageFile != null
+                      ? ClipOval(
+                          child: Image.network(
+                            imageFile!.path,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () {
+                            pick(ImageSource.gallery);
+                          },
+                          icon: const Icon(Icons.add_a_photo),
+                          color: Colors.white,
+                        ),
+                ),
+              ),
               TextFormField(
                 controller: _tituloController,
                 decoration: const InputDecoration(labelText: 'Título'),
@@ -105,6 +146,7 @@ class _AddAnuncioState extends State<AddAnuncio> {
                   ),
                 ),
               ),
+              const SizedBox(height: 16.0),
             ],
           ),
         ),

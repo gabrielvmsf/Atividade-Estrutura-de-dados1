@@ -1,6 +1,7 @@
 import 'package:anuncios/noticiaHelper.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   Database? _db;
@@ -21,18 +22,18 @@ class DatabaseHelper {
   }
 
   Future<Database?> initDb() async {
-    final databasePath = await getDatabasesPath();
-    final path = join(databasePath, 'noticiaBD.db');
+    final directory = await getApplicationDocumentsDirectory();
+    final path = join(directory.path, 'noticiaBD.db');
 
     try {
       return _db = await openDatabase(path,
-          version: 2, onCreate: _onCreateDB, onUpgrade: onUpgradeDB);
+          version: 4, onCreate: _onCreateDB, onUpgrade: onUpgradeDB);
     } catch (e) {
       print(e);
     }
   }
 
-  Future _onCreateDB(Database db, int newVersion) async {
+  Future<void> _onCreateDB(Database db, int newVersion) async {
     await db.execute(AnunciosHelper.createScript());
   }
 

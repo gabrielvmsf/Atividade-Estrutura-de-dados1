@@ -21,8 +21,6 @@ class AnunciosHelper {
       return anuncio;
     }
 
-    print("db nulo");
-
     return null;
   }
 

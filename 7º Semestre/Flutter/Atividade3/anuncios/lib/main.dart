@@ -1,6 +1,6 @@
 import 'package:anuncios/MyApp.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future main() async {
   runApp(const MyApp());
 }

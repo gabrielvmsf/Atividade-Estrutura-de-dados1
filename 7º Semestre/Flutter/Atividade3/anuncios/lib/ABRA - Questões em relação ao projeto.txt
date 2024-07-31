@@ -1,0 +1,15 @@
+Tive alguns problemas em relação a algumas questões. Tentei implementar a parte de salvar o arquivo para posteriormente salvar no banco de dados conforme estava no slide, mas retornava o seguinte erro e impedia a aplicação de funcionar:
+
+"Error: MissingPluginException(No implementation found for method getApplicationDocumentsDirectory on channel plugins.flutter.io/path_provider)"
+
+Além disso, sobre o próprio banco de dados, tive um erro referenciado por:
+
+"Error: Bad state: databaseFactory not initialized. DatabaseFactory is only initialized when using sqflite. When using sqflite_common_ffi, you must call databaseFactory = databaseFactoryFfi; before using global openDatabase API."
+
+Fiz a implementação conforme os slides da aula e também fiz algumas modificações no código conforme sugerido em fóruns, como neste exemplo: https://stackoverflow.com/questions/76158800/databasefactory-not-initialized-when-using-sqflite-in-flutter .
+
+Porém, essas soluções também não funcionaram; acabaram retornando mais erros.
+
+Caso seja possível, ao retornar as aulas, gostaria de verificar se é possível visualizar a implementação do banco de dados SQL em sala de aula. Não consegui acompanhar tão bem apenas pelos slides devido a esses erros que ocorreram durante o processo.
+
+Por favor, me avise se precisar de mais alguma informação. Obrigado!
