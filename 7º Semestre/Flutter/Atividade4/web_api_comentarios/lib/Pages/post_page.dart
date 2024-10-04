@@ -229,7 +229,7 @@ class _PostsPageState extends State<PostsPage> {
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(12.0)),
-                                    color: Colors.blue,
+                                    color: Colors.deepPurple,
                                   ),
                                   child: Text(
                                     post.title,
