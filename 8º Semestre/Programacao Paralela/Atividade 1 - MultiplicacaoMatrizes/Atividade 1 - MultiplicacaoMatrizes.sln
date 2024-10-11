@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Atividade 1 - MultiplicacaoMatrizes", "Atividade 1 - MultiplicacaoMatrizes\Atividade 1 - MultiplicacaoMatrizes.vcxproj", "{BBA80521-D8DD-44CD-99F8-2D0F5B8DFBB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BBA80521-D8DD-44CD-99F8-2D0F5B8DFBB9}.Debug|x64.ActiveCfg = Debug|x64
+		{BBA80521-D8DD-44CD-99F8-2D0F5B8DFBB9}.Debug|x64.Build.0 = Debug|x64
+		{BBA80521-D8DD-44CD-99F8-2D0F5B8DFBB9}.Release|x64.ActiveCfg = Release|x64
+		{BBA80521-D8DD-44CD-99F8-2D0F5B8DFBB9}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4AA5B808-C2FC-4D30-95C5-5860BA75892F}
+	EndGlobalSection
+EndGlobal
