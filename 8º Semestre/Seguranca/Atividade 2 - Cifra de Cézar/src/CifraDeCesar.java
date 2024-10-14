@@ -2,7 +2,8 @@ public class CifraDeCesar {
 
     public static String cifraDeCesarModular(String texto, int deslocamento) {
         StringBuilder resultado = new StringBuilder();
-        deslocamento = deslocamento % 26 + 26;
+        deslocamento = deslocamento % 26;  
+        
         for (char i : texto.toCharArray()) {
             if (Character.isLetter(i)) {
                 if (Character.isUpperCase(i)) {
@@ -11,7 +12,7 @@ public class CifraDeCesar {
                     resultado.append((char) ('a' + (i - 'a' + deslocamento) % 26));
                 }
             } else {
-                resultado.append(i);
+                resultado.append(i); 
             }
         }
         return resultado.toString();
@@ -20,23 +21,24 @@ public class CifraDeCesar {
     public static String cifraDeCesarSemModular(String texto, int deslocamento) {
         StringBuilder resultado = new StringBuilder();
         deslocamento = (deslocamento % 26 + 26) % 26; 
+        
         for (char i : texto.toCharArray()) {
             if (Character.isLetter(i)) {
                 if (Character.isUpperCase(i)) {
                     int novaPosicao = i + deslocamento;
                     if (novaPosicao > 'Z') {
-                        novaPosicao -= 26;
+                        novaPosicao -= 26;  
                     }
                     resultado.append((char) novaPosicao);
                 } else {
                     int novaPosicao = i + deslocamento;
                     if (novaPosicao > 'z') {
-                        novaPosicao -= 26;
+                        novaPosicao -= 26;  
                     }
                     resultado.append((char) novaPosicao);
                 }
             } else {
-                resultado.append(i);
+                resultado.append(i);  
             }
         }
         return resultado.toString();
