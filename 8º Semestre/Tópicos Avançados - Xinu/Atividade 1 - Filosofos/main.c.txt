@@ -1,0 +1,116 @@
+#include <xinu.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define NUM_FILOSOFOS 5        // Total de filosofos
+#define MAX_REFICOES 7         // Maximo de refeicoes permitidas
+
+sid32 garfos[NUM_FILOSOFOS];   // Semaforos para o controle dos garfos
+sid32 mutex_global;            // Mutex para exclusao mutua
+sid32 semaforo_impressao;      // Semaforo para controle de impressao
+
+int refeicoes_contadas[NUM_FILOSOFOS]; // Contador de refeicoes para cada filosofo
+enum {PENSANDO, COM_FOME, JANTANDO} status[NUM_FILOSOFOS];
+
+// Funcao que permite que o filosofo tente comer
+void tentar_comer(int id) {
+    if (status[id] == COM_FOME &&
+        status[(id + NUM_FILOSOFOS - 1) % NUM_FILOSOFOS] != JANTANDO &&
+        status[(id + 1) % NUM_FILOSOFOS] != JANTANDO) {
+        
+        status[id] = JANTANDO;
+        signal(garfos[id]); // Libera o semaforo para o filosofo comer
+    }
+}
+
+// Funcao para os filosofos pegarem os garfos
+void pegar_garfos(int id) {
+    wait(mutex_global); // Entra na regiao critica
+    status[id] = COM_FOME;
+
+    wait(semaforo_impressao); 
+    printf("Filosofo %d esta com fome e quer comer.\n", id);
+    signal(semaforo_impressao);
+    
+    // Tenta comer
+    tentar_comer(id);
+    signal(mutex_global); // Sai da regiao critica
+    wait(garfos[id]); // Aguarda para comer
+}
+
+// Funcao para soltar os garfos
+void soltar_garfos(int id) {
+    wait(mutex_global); // Entra na regiao critica
+    status[id] = PENSANDO;
+
+    wait(semaforo_impressao); 
+    printf("Filosofo %d terminou de comer e agora esta pensando.\n", id);
+    signal(semaforo_impressao);
+
+    // Testa os vizinhos
+    tentar_comer((id + NUM_FILOSOFOS - 1) % NUM_FILOSOFOS);
+    tentar_comer((id + 1) % NUM_FILOSOFOS);
+    signal(mutex_global); // Sai da regiao critica
+}
+
+// Função principal de cada filósofo
+void filosofo(int id) {
+    while (refeicoes_contadas[id] < MAX_REFICOES) {
+        wait(semaforo_impressao);
+        printf("Filosofo %d esta pensando...\n", id);
+        signal(semaforo_impressao);
+        
+        sleep(rand() % 4 + 1); // Filosofo pensa por um tempo aleatorio
+        pegar_garfos(id);      // Tenta pegar os garfos
+
+        wait(semaforo_impressao); 
+        printf("Filosofo %d esta jantando...\n", id);
+        signal(semaforo_impressao); 
+        
+        sleep(rand() % 3 + 1);  // Filosofo janta por um tempo aleatorio
+        soltar_garfos(id);      // Solta os garfos apos comer
+        
+        refeicoes_contadas[id]++; // Incrementa o contador de refeicoes
+    }
+
+    wait(semaforo_impressao);
+    printf("Filosofo %d finalizou suas refeicoes.\n", id);
+    signal(semaforo_impressao);
+}
+
+int main(void) {
+    int i;
+
+    // Inicializa semaforos e contadores
+    mutex_global = semcreate(1);      // Mutex para garantir exclusao mútua
+    semaforo_impressao = semcreate(1); // Semaforo para controle de impressao
+    for (i = 0; i < NUM_FILOSOFOS; i++) {
+        garfos[i] = semcreate(0);      // Semaforos individuais para cada filosofo
+        status[i] = PENSANDO;           // Inicializa todos os filosofos como pensando
+        refeicoes_contadas[i] = 0;      // Inicializa contagem de refeicoes
+    }
+
+    // Cria processos para cada filosofo
+    for (i = 0; i < NUM_FILOSOFOS; i++) {
+        resume(create(filosofo, 1024, 20, "filosofo", 1, i));
+    }
+
+    // Aguardar todos os filosofos terminarem
+    while (1) {
+        sleep(1);
+        int total_refeicoes = 0;
+        for (i = 0; i < NUM_FILOSOFOS; i++) {
+            total_refeicoes += refeicoes_contadas[i];
+        }
+        // Verifica se todos os filosofos terminaram suas refeicoes
+        if (total_refeicoes >= NUM_FILOSOFOS * MAX_REFICOES) {
+            break; // Sai do loop se todos terminaram
+        }
+    }
+
+    wait(semaforo_impressao);
+    printf("Todos os filosofos completaram suas refeicoes. Encerrando o programa.\n");
+    signal(semaforo_impressao);
+
+    return 0;
+}
