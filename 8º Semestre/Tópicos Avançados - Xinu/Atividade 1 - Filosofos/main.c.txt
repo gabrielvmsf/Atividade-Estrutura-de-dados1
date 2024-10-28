@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #define MAX_REFICOES 3  // Definindo o número máximo de refeições
-#define NUM_FILOSOFOS 5#define NUM_FILOSOFOS 5
+#define NUM_FILOSOFOS 5
 
 sid32 output_sem;                 // Semáforo para saída do printf
 
