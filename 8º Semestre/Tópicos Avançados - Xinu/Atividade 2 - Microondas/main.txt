@@ -11,6 +11,8 @@ int klystron_ligado = 0;
 int tempo_resfriamento = 5;
 int ultimo_uso_klystron = 0;
 sid32 semaforo_porta;
+int acao_futura_programada = 0;
+int horario_acao_futura = 0;
 
 // Declaração de funções
 void abrir_fechar_porta();
@@ -20,14 +22,20 @@ void resfriamento();
 void emergencia();
 void controle_klystron(int potencia);
 void exibir_status_klystron();
-int strcspn(const char *str, const char *reject);
+void programar_acao_futura();
+void acao_futura();
+void ciclo_respiracao(int tempo_total);
+void tracao_prato(int tempo);
+void comando_luz_interna(int estado);
 int obter_tempo_personalizado();
+int strcspn(const char *str, const char *reject);
 
 int main() {
     semaforo_porta = semcreate(1);
-    
+
     char opcao[10]; // Armazena a opção do menu
     while (1) {
+
         printf("\n---- MENU PRINCIPAL ----\n");
         printf("[1] Abrir/Fechar Porta\n");
         printf("[2] Ciclo de Aquecimento (Programas)\n");
@@ -35,18 +43,19 @@ int main() {
         printf("[4] Emergencia / Parar Ciclo\n");
         printf("[5] Exibir Relogio\n");
         printf("[6] Status do Klystron\n");
+        printf("[7] Programar Acao Futura\n");
         printf("[0] Sair\n");
         printf("Escolha uma opcao: ");
 
-        memset(opcao, 0, sizeof(opcao)); // Garante que o buffer esteja limpo
-        int bytes_lidos = read(0, opcao, sizeof(opcao) - 1); // Lê a entrada do usuário
+        memset(opcao, 0, sizeof(opcao)); // Limpa o buffer
+        int bytes_lidos = read(0, opcao, sizeof(opcao) - 1);
 
         if (bytes_lidos <= 0) {
             printf("Erro ao ler entrada. Tente novamente.\n");
             continue;
         }
 
-        opcao[strcspn(opcao, "\n")] = '\0'; // Remove o caractere de nova linha, se houver
+        opcao[strcspn(opcao, "\n")] = '\0'; // Remove nova linha
 
         if (strcmp(opcao, "1") == 0) {
             abrir_fechar_porta();
@@ -63,22 +72,23 @@ int main() {
 
             programa[strcspn(programa, "\n")] = '\0';
             int tempo_programa = 0;
-            // Definindo tempo e potência pré-definidos para os programas
+
+            // Definindo tempo e potência para os programas
             if (strcmp(programa, "Carnes") == 0) {
                 tempo_programa = 20;
-                controle_klystron(7);  // Potência para carnes
+                controle_klystron(7);
             } else if (strcmp(programa, "Peixe") == 0) {
                 tempo_programa = 15;
-                controle_klystron(5);  // Potência para peixe
+                controle_klystron(5);
             } else if (strcmp(programa, "Frango") == 0) {
                 tempo_programa = 18;
-                controle_klystron(6);  // Potência para frango
+                controle_klystron(6);
             } else if (strcmp(programa, "Lasanha") == 0) {
                 tempo_programa = 25;
-                controle_klystron(8);  // Potência para lasanha
+                controle_klystron(8);
             } else if (strcmp(programa, "Pipoca") == 0) {
                 tempo_programa = 10;
-                controle_klystron(9);  // Potência para pipoca
+                controle_klystron(9);
             } else {
                 printf("Programa nao reconhecido!\n");
                 continue;
@@ -87,7 +97,7 @@ int main() {
             ciclo_aquecimento(programa, tempo_programa);
         } else if (strcmp(opcao, "3") == 0) {
             int tempo_aquecimento = obter_tempo_personalizado();
-            controle_klystron(7);  // Definindo uma potência padrão para o modo personalizado
+            controle_klystron(7);
             ciclo_aquecimento("Personalizado", tempo_aquecimento);
         } else if (strcmp(opcao, "4") == 0) {
             emergencia();
@@ -95,15 +105,45 @@ int main() {
             exibir_relogio();
         } else if (strcmp(opcao, "6") == 0) {
             exibir_status_klystron();
+        } else if (strcmp(opcao, "7") == 0) {
+            programar_acao_futura();
         } else if (strcmp(opcao, "0") == 0) {
             printf("Saindo do sistema...\n");
             break;
         } else {
             printf("Opcao invalida. Tente novamente.\n");
         }
+
+        acao_futura(); // Verifica e executa ações programadas
     }
 
     return 0;
+}
+
+// Adiciona ações futuras com verificação
+void programar_acao_futura() {
+    printf("Programando acao futura...\n");
+    printf("Digite o horario no formato HHMM (Ex: 1530 para 15:30): ");
+    char entrada[10];
+    memset(entrada, 0, sizeof(entrada));
+    read(0, entrada, sizeof(entrada) - 1);
+    horario_acao_futura = atoi(entrada);
+    acao_futura_programada = 1;
+    printf("Acao futura programada para %04d.\n", horario_acao_futura);
+}
+
+void acao_futura() {
+    if (!acao_futura_programada) return;
+
+    int horas = (clktime / 3600) % 24;
+    int minutos = (clktime / 60) % 60;
+    int horario_atual = horas * 100 + minutos;
+
+    if (horario_atual == horario_acao_futura) {
+        printf("Executando acao programada...\n");
+        ciclo_aquecimento("Futuro", 10);
+        acao_futura_programada = 0;
+    }
 }
 
 // Função para calcular a posição de uma string dentro de outra, sem usar a função da biblioteca
@@ -149,7 +189,7 @@ void abrir_fechar_porta() {
         printf("Abrindo a porta...\n");
         porta_aberta = 1;
         luz_ligada = 1;
-        parar_ciclo = 1; // Para o ciclo se a porta for aberta
+        parar_ciclo = 1;
     }
     signal(semaforo_porta);
 }
@@ -172,6 +212,7 @@ void ciclo_aquecimento(char *programa, int tempo_aquecimento) {
     }
 
     printf("Iniciando ciclo de aquecimento para %s...\n", programa);
+    printf("Ligando a luz.\n");
     int i;
     for (i = 0; i < tempo_aquecimento; i++) {
         if (parar_ciclo || porta_aberta) {
@@ -186,7 +227,8 @@ void ciclo_aquecimento(char *programa, int tempo_aquecimento) {
 
     // Exibindo o "bip visual" uma única vez
     printf("Ciclo de aquecimento concluido.\n");
-    printf("Ciclo de aquecimento concluido com sucesso! (Bip visual)\n");
+    printf("Desligando a luz.\n");
+    printf("(Bip visual)\n");
     resfriamento();
 }
 
@@ -206,7 +248,6 @@ void resfriamento() {
 
     klystron_ligado = 0;
     printf("Resfriamento concluido.\n");
-    printf("Ciclo de resfriamento concluido com sucesso! (Bip visual)\n");
 }
 
 void emergencia() {
