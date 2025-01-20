@@ -1,0 +1,154 @@
+#include <Servo.h>
+
+// Definição de pinos
+#define LED_ESTEIRA 13  // LED branco para esteira rodando
+#define LED_REPROVADO 12 // LED vermelho para fruto rejeitado
+#define LED_APROVADO 11  // LED verde para fruto aprovado
+#define LED_ANALISE 10   // LED azul para análise do fruto
+
+#define BOTAO_LIGAR 2    // Botão para ligar o sistema
+#define BOTAO_DESLIGAR 4 // Botão para desligar o sistema
+#define BOTAO_EMERGENCIA 3 // Botão de emergência para parar o sistema
+
+#define MOTOR_OUT_A 7    // Pino vermelho do motor CC
+#define MOTOR_OUT_B 8    // Pino preto do motor CC
+
+Servo servo; // Objeto do servo motor
+
+// Variáveis globais
+volatile bool sistemaAtivo = false; // Estado do sistema
+volatile bool esteiraRodando = false; // Estado da esteira
+volatile bool esperandoInicio = false; // Espera o início do sistema
+
+void setup() {
+  // Configuração de pinos
+  pinMode(LED_ESTEIRA, OUTPUT);
+  pinMode(LED_REPROVADO, OUTPUT);
+  pinMode(LED_APROVADO, OUTPUT);
+  pinMode(LED_ANALISE, OUTPUT);
+
+  pinMode(BOTAO_LIGAR, INPUT_PULLUP);
+  pinMode(BOTAO_DESLIGAR, INPUT_PULLUP);
+  pinMode(BOTAO_EMERGENCIA, INPUT_PULLUP);
+
+  pinMode(MOTOR_OUT_A, OUTPUT);
+  pinMode(MOTOR_OUT_B, OUTPUT);
+
+  servo.attach(6); // Conecta o servo motor ao pino 6
+  servo.write(0);  
+
+  // Inicialização
+  digitalWrite(LED_ESTEIRA, LOW);
+  digitalWrite(LED_REPROVADO, LOW);
+  digitalWrite(LED_APROVADO, LOW);
+  digitalWrite(LED_ANALISE, LOW);
+
+  Serial.begin(9600);
+  Serial.println("Sistema pronto. Pressione o botão para iniciar.");
+}
+
+void loop() {
+  // Verifica se o botão de emergência foi pressionado
+  if (digitalRead(BOTAO_EMERGENCIA) == LOW) {
+    pararSistema();
+    delay(500); // Anti-bounce
+  }
+
+  // Verifica se o botão de desligar foi pressionado
+  if (digitalRead(BOTAO_DESLIGAR) == LOW) {
+    pararSistema();
+    delay(500); // Anti-bounce
+  }
+
+  // Verifica se o botão de ligar foi pressionado
+  if (digitalRead(BOTAO_LIGAR) == LOW && !esteiraRodando && !esperandoInicio) {
+    esperandoInicio = true;
+    sistemaAtivo = true;
+    iniciarEsteira();
+    delay(500); // Anti-bounce
+  }
+
+  // Processa o transporte do fruto se o sistema estiver ativo
+  if (sistemaAtivo && esteiraRodando) {
+    transportaFruto();
+  }
+}
+
+// Função para iniciar a esteira
+void iniciarEsteira() {
+  esteiraRodando = true;
+  digitalWrite(LED_ESTEIRA, HIGH);   // Liga o LED da esteira
+  digitalWrite(MOTOR_OUT_A, HIGH);  // Motor CC começa a rodar
+  digitalWrite(MOTOR_OUT_B, LOW);
+
+  Serial.println("Esteira rodando...");
+  delay(6000); // 6 segundos de operação da esteira
+  digitalWrite(LED_ESTEIRA, LOW); // Desliga o LED da esteira após 6 segundos
+  digitalWrite(MOTOR_OUT_A, LOW);  // Para o motor
+  digitalWrite(MOTOR_OUT_B, LOW);
+
+  Serial.println("Esteira parada. Analisando fruto...");
+  //delay(1000); // Atraso de 1 segundo antes de começar a análise
+}
+
+// Função para transportar e classificar o fruto
+void transportaFruto() {
+  // Inicia a análise
+  digitalWrite(LED_ANALISE, HIGH);  // Liga o LED azul para indicar análise
+  Serial.println("Analisando fruto...");
+  delay(4000); // Tempo de análise (4 segundos)
+
+  int resultado = random(0, 10); // Gera um número aleatório (0-9)
+  Serial.println(resultado);
+  if (resultado >= 6) { // Fruto aprovado
+    digitalWrite(LED_ANALISE, LOW); // Desliga o LED azul
+    digitalWrite(LED_APROVADO, HIGH); // Liga o LED verde
+    Serial.println("Fruto aprovado. Transportando para recipiente...");
+    digitalWrite(MOTOR_OUT_A, HIGH);  // Motor CC começa a rodar
+    digitalWrite(MOTOR_OUT_B, LOW);
+    delay(3000);                      // Simula transporte (3 segundos)
+    digitalWrite(LED_APROVADO, LOW);  // Desliga o LED verde
+    digitalWrite(MOTOR_OUT_A, LOW);  // Para o motor
+    digitalWrite(MOTOR_OUT_B, LOW);
+
+    // Esteira continua rodando até que o fruto caia no recipiente
+    delay(6000); // Tempo da esteira para o fruto cair
+  } else { // Fruto reprovado
+    digitalWrite(LED_ANALISE, LOW); // Desliga o LED azul
+    digitalWrite(LED_REPROVADO, HIGH); // Liga o LED vermelho
+    Serial.println("Fruto reprovado. Empurrando para descarte...");
+    servo.write(90);                   // Servo empurra o fruto
+    delay(2000);                       // Tempo para empurrar
+    servo.write(0);                    // Servo retorna
+    servo.write(0);                    // Retorna o servo à posição inicial
+    digitalWrite(LED_REPROVADO, LOW);  // Desliga o LED vermelho
+  }
+
+  digitalWrite(LED_ANALISE, LOW);  // Desliga o LED azul após a análise
+  pararEsteira();
+}
+
+// Função para parar a esteira
+void pararEsteira() {
+  esteiraRodando = false;
+  digitalWrite(LED_ESTEIRA, LOW);   // Desliga o LED da esteira
+  digitalWrite(MOTOR_OUT_A, LOW);  // Para o motor
+  digitalWrite(MOTOR_OUT_B, LOW);
+
+  Serial.println("Esteira parada. Pressione o botão para processar o próximo fruto.");
+}
+
+// Função para parar o sistema completamente
+void pararSistema() {
+  sistemaAtivo = false;
+  esteiraRodando = false;
+  esperandoInicio = false;
+  digitalWrite(LED_ESTEIRA, LOW);
+  digitalWrite(LED_APROVADO, LOW);
+  digitalWrite(LED_REPROVADO, LOW);
+  digitalWrite(LED_ANALISE, LOW);
+  digitalWrite(MOTOR_OUT_A, LOW);
+  digitalWrite(MOTOR_OUT_B, LOW);
+
+  Serial.println("Sistema desligado.");
+}
