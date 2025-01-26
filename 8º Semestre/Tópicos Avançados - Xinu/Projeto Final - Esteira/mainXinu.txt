@@ -1,6 +1,5 @@
 #include <xinu.h>
 #include <stdio.h>
-#include <string.h>
 
 /* Variaveis globais para status dos componentes */
 volatile int esteira_ligada = 0;
@@ -15,15 +14,21 @@ volatile int frutos_reprovados = 0;     // Contador de frutos reprovados
 volatile int histograma[10] = {0};     // Histograma de qualidade de frutos
 
 /* Simulacao de GPIO */
-#define PINO_BOTAO_DESLIGAR 2
-#define PINO_LED_ESTEIRA    3
-#define PINO_LED_BOM        4
-#define PINO_LED_RUIM       5
+#define PINO_LED_ESTEIRA    0
+#define PINO_LED_BOM        1
+#define PINO_LED_RUIM       2
+#define PINO_LED_ANALISE    3
+#define PINO_SERVO_MOTOR    4
+#define PINO_ESTEIRA_MOTOR  5
 
 volatile int gpio_pinos[6]; // Simula os estados dos pinos
 
-/* Mutex para sincronizacao */
+/* Mutex e semaforos para sincronizacao */
 sid32 mutex;
+sid32 sem_analise_cor;
+sid32 sem_analise_volume;
+sid32 sem_analise_pragas;
+sid32 sem_analise_completa;
 
 /* Prototipos das funcoes */
 void esteira();
@@ -39,13 +44,23 @@ void copia_string(char *dest, const char *src);
 int compara_string(const char *str1, const char *str2);
 int get_input();
 void exibir_estatisticas();
+void analise_cor();
+void analise_volume();
+void analise_pragas();
 
 /* Funcao principal */
 process main(void) {
     mutex = semcreate(1);
+    sem_analise_cor = semcreate(0);
+    sem_analise_volume = semcreate(0);
+    sem_analise_pragas = semcreate(0);
+    sem_analise_completa = semcreate(0);
+
     inicializar_gpio();
 
-    printf("Sistema iniciado.\n");
+    printf("\n========================\n");
+    printf("[ %ds] Sistema iniciado.\n", clktime);
+    printf("========================\n");
     printf("Digite '1' para processar um fruto ou '0' para desligar o sistema.\n");
 
     /* Criando thread para monitorar o sistema */
@@ -54,113 +69,8 @@ process main(void) {
     return OK;
 }
 
-/* Funcao para simular o motor da esteira */
-void esteira() {
-    int tempo;
 
-    while (sistema_ativo) {
-        wait(mutex);
-        esteira_ligada = 1;
-        set_gpio(PINO_LED_ESTEIRA, 1); // Liga o LED da esteira
-        printf("\nEsteira iniciada. Transportando fruto...\n");
-        signal(mutex);
-
-        for (tempo = 1; tempo <= 6; tempo++) { // Aumentado para 6 segundos
-            sleep(1); // Simula um segundo por iteracao
-            printf("Tempo na esteira: %d segundo(s)\n", tempo);
-        }
-
-        wait(mutex);
-        esteira_ligada = 0;
-        set_gpio(PINO_LED_ESTEIRA, 0); // Desliga o LED da esteira
-        printf("Esteira parada. Fruto chegou a posicao de analise.\n");
-        signal(mutex);
-
-        /* Inicia a analise do fruto */
-        resume(create(analise_fruto, 1024, 20, "Analise", 0));
-        break;
-    }
-}
-
-/* Funcao para simular a analise do fruto */
-void analise_fruto() {
-    wait(mutex);
-
-    printf("Analisando o fruto...\n");
-
-    int tempo;
-    for (tempo = 1; tempo <= 4; tempo++) { // Analise por 4 segundos
-        sleep(1); // Simula um segundo por iteracao
-        printf("Tempo de analise: %d segundo(s)\n", tempo);
-    }
-
-    int qualidade = clktime % 10; // Valor pseudo-aleatorio baseado no tempo
-    histograma[qualidade]++; // Atualiza o histograma
-
-    if (qualidade >= 6) {  // Chance reduzida para 6
-        copia_string(status_fruto, "Aprovado");
-        set_gpio(PINO_LED_BOM, 1); // Liga o LED do fruto bom
-        set_gpio(PINO_LED_RUIM, 0); // Desliga o LED do fruto ruim
-        frutos_aprovados++;         // Incrementa frutos aprovados
-        printf("Fruto analisado: APROVADO.\n");
-
-        /* Continua o transporte para o recipiente de bons frutos */
-        resume(create(transporte_para_bom, 1024, 20, "TransporteBom", 0));
-
-    } else {
-        copia_string(status_fruto, "Reprovado");
-        set_gpio(PINO_LED_BOM, 0); // Desliga o LED do fruto bom
-        set_gpio(PINO_LED_RUIM, 1); // Liga o LED do fruto ruim
-        frutos_reprovados++;         // Incrementa frutos reprovados
-        printf("Fruto analisado: REPROVADO.\n");
-        resume(create(servo_motor, 1024, 20, "Servo", 0));
-    }
-    signal(mutex);
-}
-
-/* Funcao para simular o transporte do fruto aprovado */
-void transporte_para_bom() {
-    wait(mutex);
-    printf("Esteira transportando fruto para o recipiente de bons frutos...\n");
-    set_gpio(PINO_LED_ESTEIRA, 1); // Liga o LED da esteira
-    esteira_ligada = 1;
-    signal(mutex);
-
-    // Feedback do tempo de transporte
-    for (int tempo = 1; tempo <= 3; tempo++) { // 3 segundos
-        sleep(1); // Simula um segundo por iteracao
-        printf("Tempo de transporte para recipiente de bons frutos: %d segundo(s)\n", tempo);
-    }
-
-    wait(mutex);
-    printf("Fruto aprovado foi depositado no recipiente de bons frutos.\n");
-    set_gpio(PINO_LED_ESTEIRA, 0); // Desliga o LED da esteira
-    esteira_ligada = 0;
-    signal(mutex);
-
-    /* Finaliza o ciclo */
-    printf("\nDigite '1' para processar outro fruto ou '0' para desligar o sistema.\n");
-}
-
-/* Funcao para simular o servo motor */
-void servo_motor() {
-    wait(mutex);
-
-    if (compara_string(status_fruto, "Reprovado") == 0) {
-        servo_motor_ativo = 1;
-        printf("Servo motor ativado para descarte do fruto.\n");
-        sleep(2); // Tempo para empurrar o fruto
-        servo_motor_ativo = 0;
-        printf("Servo motor desativado após descarte do fruto.\n");
-    }
-
-    signal(mutex);
-
-    /* Finaliza o ciclo */
-    printf("\nDigite '1' para processar outro fruto ou '0' para desligar o sistema.\n");
-}
-
-/* Funcao para monitorar o sistema */
+/* Monitoramento dos botoes */
 void monitorar_botoes() {
     int input;
 
@@ -171,13 +81,160 @@ void monitorar_botoes() {
             finalizar_sistema();
             break;
         } else if (input == 1) {
-            /* Inicia as threads para o fluxo de trabalho */
             resume(create(esteira, 1024, 20, "Esteira", 0));
         }
     }
 }
 
-/* Funcao para finalizar o sistema */
+/* Funcao para simular o motor da esteira */
+void esteira() {
+    int tempo;
+
+    while (sistema_ativo) {
+        wait(mutex);
+        esteira_ligada = 1;
+        set_gpio(PINO_LED_ESTEIRA, 1); // Liga o LED da esteira
+        set_gpio(PINO_ESTEIRA_MOTOR, 1); // Liga o motor da esteira
+        printf("[ %ds] Esteira iniciada. Transportando fruto...\n", clktime);
+        signal(mutex);
+
+        for (tempo = 0; tempo < 6; tempo++) {
+            sleep(1); // Simula um segundo por iteracao
+            printf("[ %ds] Tempo na esteira: %d segundo(s)\n", clktime, tempo + 1);
+        }
+
+        wait(mutex);
+        esteira_ligada = 0;
+        set_gpio(PINO_LED_ESTEIRA, 0); // Desliga o LED da esteira
+        set_gpio(PINO_ESTEIRA_MOTOR, 0); // Desliga o motor da esteira
+        printf("[ %ds] Esteira parada. Fruto chegou a posicao de analise.\n", clktime);
+        signal(mutex);
+
+        printf("\n");
+
+        /* Inicia a analise do fruto */
+        resume(create(analise_fruto, 1024, 20, "Analise", 0));
+        break;
+    }
+}
+
+/* Funcao para simular a analise do fruto */
+void analise_fruto() {
+    wait(mutex);
+    printf("[ %ds] Iniciando a analise do fruto...\n", clktime);
+    set_gpio(PINO_LED_ANALISE, 1); // Liga o LED de analise
+    sleep(2); // Simula 2 segundos para começar analise
+
+    /* Cria processos para cada tipo de analise */
+    resume(create(analise_cor, 1024, 20, "AnaliseCor", 0));
+    resume(create(analise_volume, 1024, 20, "AnaliseVolume", 0));
+    resume(create(analise_pragas, 1024, 20, "AnalisePragas", 0));
+
+    /* Aguarda a conclusao das tres analises */
+    wait(sem_analise_cor);
+    wait(sem_analise_volume);
+    wait(sem_analise_pragas);
+
+    /* Marca que todas as análises foram concluídas */
+    signal(sem_analise_completa);
+
+    int qualidade = clktime % 10; // Valor pseudo-aleatorio baseado no tempo
+    histograma[qualidade]++; // Atualiza o histograma
+    printf("[ %ds] Valor de qualidade do fruto: %d\n", clktime, qualidade);
+
+    sleep(2); // Simula 2 segundo para finalizar a analise
+
+    signal(mutex);
+
+    if (qualidade >= 6) {
+        copia_string(status_fruto, "Aprovado");
+        set_gpio(PINO_LED_BOM, 1); // Liga o LED do fruto bom
+        set_gpio(PINO_LED_RUIM, 0); // Desliga o LED do fruto ruim
+        frutos_aprovados++;
+        printf("[ %ds] Fruto analisado: APROVADO.\n", clktime);
+
+        /* Continua o transporte para o recipiente de bons frutos */
+        resume(create(transporte_para_bom, 1024, 20, "TransporteBom", 0));
+    } else {
+        copia_string(status_fruto, "Reprovado");
+        set_gpio(PINO_LED_BOM, 0); // Desliga o LED do fruto bom
+        set_gpio(PINO_LED_RUIM, 1); // Liga o LED do fruto ruim
+        frutos_reprovados++;
+        printf("[ %ds] Fruto analisado: REPROVADO.\n", clktime);
+        resume(create(servo_motor, 1024, 20, "Servo", 0));
+    }
+    
+    set_gpio(PINO_LED_ESTEIRA, 0); // Desliga o LED de analise
+}
+
+/* Analise de cor */
+void analise_cor() {
+    printf("[ %ds] Analisando cor...\n", clktime);
+    sleep(3); // Simula 3 segundos de analise
+    printf("[ %ds] Analise de cor concluida.\n", clktime);
+    signal(sem_analise_cor);
+}
+
+/* Analise de volume */
+void analise_volume() {
+    printf("[ %ds] Analisando volume...\n", clktime);
+    sleep(7); // Simula 7 segundos de analise
+    printf("[ %ds] Analise de volume concluida.\n", clktime);
+    printf("\n");
+    signal(sem_analise_volume);
+}
+
+/* Analise de pragas */
+void analise_pragas() {
+    printf("[ %ds] Analisando pragas...\n", clktime);
+    sleep(5); // Simula 5 segundos de analise
+    printf("[ %ds] Analise de pragas concluida.\n", clktime);
+    signal(sem_analise_pragas);
+}
+
+/* Transporte do fruto aprovado */
+void transporte_para_bom() {
+    wait(mutex);
+    printf("\n");
+    printf("[ %ds] Esteira transportando fruto para o recipiente de bons frutos...\n", clktime);
+    set_gpio(PINO_LED_ESTEIRA, 1); // Liga o LED da esteira
+    set_gpio(PINO_ESTEIRA_MOTOR, 1); // Liga o motor da esteira
+    esteira_ligada = 1;
+    signal(mutex);
+    int tempo;
+    for (tempo = 0; tempo < 3; tempo++) {
+        sleep(1);
+        printf("[ %ds] Tempo de transporte: %d segundo(s)\n", clktime, tempo + 1);
+    }
+
+    wait(mutex);
+    printf("[ %ds] Fruto aprovado foi depositado no recipiente de bons frutos.\n\n", clktime);
+    set_gpio(PINO_LED_ESTEIRA, 0); // Desliga o LED da esteira
+    set_gpio(PINO_ESTEIRA_MOTOR, 0); // Desliga o motor da esteira
+    esteira_ligada = 0;
+    signal(mutex);
+    
+    printf("[ %ds] Digite '1' para processar outro fruto ou '0' para desligar o sistema.\n", clktime);
+}
+
+/* Simula o servo motor */
+void servo_motor() {
+    wait(mutex);
+    printf("\n");
+    if (compara_string(status_fruto, "Reprovado") == 0) {
+        set_gpio(PINO_SERVO_MOTOR, 1); // Ativa o servo motor
+        servo_motor_ativo = 1;
+        printf("[ %ds] Servo motor ativado para descarte do fruto.\n", clktime);
+        sleep(2);
+        servo_motor_ativo = 0;
+        printf("[ %ds] Servo motor desativado apos descarte do fruto.\n\n", clktime);
+        set_gpio(PINO_SERVO_MOTOR, 0); // Desativa o servo motor
+    }
+    signal(mutex);
+    printf("[ %ds] Digite '1' para processar outro fruto ou '0' para desligar o sistema.\n", clktime);
+}
+
+/* Finaliza o sistema */
 void finalizar_sistema() {
     wait(mutex);
     sistema_ativo = 0;
@@ -188,30 +245,33 @@ void finalizar_sistema() {
     set_gpio(PINO_LED_RUIM, 0);
     copia_string(status_fruto, "N/A");
 
-    exibir_estatisticas();  // Exibe as estatísticas ao finalizar o sistema
+    exibir_estatisticas();
 
-    printf("Sistema desligado. Ate mais!\n");
+    printf("\n========================================\n");
+    printf("[ %ds] Sistema desligado.\n", clktime);
+    printf("========================================\n");
     signal(mutex);
 }
 
-/* Exibe as estatísticas */
+/* Exibe estatisticas */
 void exibir_estatisticas() {
-    printf("\nEstatisticas do sistema:\n");
+    printf("\n========================================\n");
+    printf("[ %ds] Estatisticas do sistema:\n", clktime);
+    printf("========================================\n");
+    printf("Total de Frutos Processados: %d\n", frutos_aprovados + frutos_reprovados);
     printf("Frutos Aprovados: %d\n", frutos_aprovados);
     printf("Frutos Reprovados: %d\n", frutos_reprovados);
+    
 
     printf("\nHistograma de Qualidade dos Frutos (0-9):\n");
-    for (int i = 0; i < 10; i++) {
+    int i;
+    for (i = 0; i < 10; i++) {
         printf("%d: ", i);
-        for (int j = 0; j < histograma[i]; j++) {
+        int j;
+        for (j = 0; j < histograma[i]; j++) {
             printf("*");
         }
         printf(" (%d)\n", histograma[i]);
-    }
-
-    if (frutos_aprovados + frutos_reprovados > 0) {
-        float media = (float)frutos_aprovados / (frutos_aprovados + frutos_reprovados) * 100;
-        printf("\nMedia de frutos aprovados: %.2f%%\n", media);
     }
 }
 
